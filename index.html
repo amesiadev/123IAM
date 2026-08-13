@@ -3,17 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6c5ce7" />
   <title>123IAM - Aventura Matemática</title>
-
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -21,7 +17,6 @@
       background: linear-gradient(160deg, #6dd5fa, #8e7dff);
       padding: 20px;
     }
-
     .game-card {
       width: min(520px, 100%);
       background: #fff;
@@ -31,145 +26,45 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
       animation: aparecer 0.6s ease-out;
     }
-
-    .mascot {
-      font-size: 88px;
-      animation: flotar 2s ease-in-out infinite;
+    .mascot { font-size: 88px; animation: flotar 2s ease-in-out infinite; }
+    h1 { font-size: clamp(2rem, 8vw, 3.5rem); color: #5746d9; margin-bottom: 10px; }
+    .intro { color: #485066; font-size: 1.15rem; line-height: 1.5; margin-bottom: 26px; }
+    label { display: block; text-align: left; color: #32384d; font-size: 1.1rem; font-weight: 700; margin: 18px 0 8px; }
+    input, select {
+      width: 100%; min-height: 58px; border: 3px solid #dedcff; border-radius: 18px;
+      padding: 12px 16px; font-size: 1.2rem; outline: none; transition: 0.2s ease; background: #fff;
     }
-
-    h1 {
-      font-size: clamp(2rem, 8vw, 3.5rem);
-      color: #5746d9;
-      margin-bottom: 10px;
-    }
-
-    .intro {
-      color: #485066;
-      font-size: 1.15rem;
-      line-height: 1.5;
-      margin-bottom: 26px;
-    }
-
-    label {
-      display: block;
-      text-align: left;
-      color: #32384d;
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin: 18px 0 8px;
-    }
-
-    input,
-    select {
-      width: 100%;
-      min-height: 58px;
-      border: 3px solid #dedcff;
-      border-radius: 18px;
-      padding: 12px 16px;
-      font-size: 1.2rem;
-      outline: none;
-      transition: 0.2s ease;
-      background: #fff;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: #6c5ce7;
-      transform: scale(1.01);
-    }
-
+    input:focus, select:focus { border-color: #6c5ce7; transform: scale(1.01); }
     button {
-      width: 100%;
-      min-height: 64px;
-      border: none;
-      border-radius: 20px;
-      margin-top: 26px;
-      background: linear-gradient(135deg, #ffb703, #ff7b00);
-      color: white;
-      font-size: 1.3rem;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 8px 0 #d95f00;
-      transition: transform 0.15s ease;
+      width: 100%; min-height: 64px; border: none; border-radius: 20px; margin-top: 26px;
+      background: linear-gradient(135deg, #ffb703, #ff7b00); color: white; font-size: 1.3rem;
+      font-weight: 800; cursor: pointer; box-shadow: 0 8px 0 #d95f00; transition: transform 0.15s ease;
     }
-
-    button:active {
-      transform: translateY(5px);
-      box-shadow: 0 3px 0 #d95f00;
-    }
-
-    #resultado {
-      display: none;
-      margin-top: 25px;
-      padding: 22px;
-      border-radius: 22px;
-      background: #f1f7ff;
-    }
-
-    #resultado h2 {
-      color: #5746d9;
-      margin-bottom: 10px;
-    }
-
-    #resultado p {
-      color: #485066;
-      font-size: 1.05rem;
-      line-height: 1.5;
-    }
-
-    @keyframes aparecer {
-      from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    @keyframes flotar {
-      0%, 100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-10px);
-      }
-    }
+    button:active { transform: translateY(5px); box-shadow: 0 3px 0 #d95f00; }
+    button:disabled { opacity: .65; cursor: default; box-shadow: none; transform: none; }
+    #resultado { display: none; margin-top: 25px; padding: 22px; border-radius: 22px; background: #f1f7ff; }
+    #resultado h2 { color: #5746d9; margin-bottom: 10px; }
+    #resultado p { color: #485066; font-size: 1.05rem; line-height: 1.5; }
+    #entrarMundo { display: none; }
+    .proximamente { margin-top: 12px; font-size: .95rem; color: #667085; }
+    @keyframes aparecer { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   </style>
 </head>
-
 <body>
-
   <main class="game-card">
-
     <div class="mascot">🦊</div>
-
     <h1>¡Hola! Soy IAM</h1>
-
     <p class="intro">
-      ¡Bienvenido a <strong>123IAM</strong>! 🌟
-      Vamos a viajar por mundos increíbles mientras jugamos,
+      ¡Bienvenido a <strong>123IAM</strong>! 🌟 Vamos a viajar por mundos increíbles mientras jugamos,
       contamos y aprendemos matemáticas.
     </p>
 
     <form id="playerForm">
-
       <label for="nombre">¿Cómo te llamas?</label>
-
-      <input
-        id="nombre"
-        type="text"
-        maxlength="20"
-        autocomplete="off"
-        placeholder="Escribe tu nombre"
-        required
-      />
+      <input id="nombre" type="text" maxlength="20" autocomplete="off" placeholder="Escribe tu nombre" required />
 
       <label for="edad">¿Cuántos años tienes?</label>
-
       <select id="edad" required>
         <option value="">Elige tu edad</option>
         <option value="4">4 años</option>
@@ -180,17 +75,15 @@
         <option value="9">9 años</option>
       </select>
 
-      <button type="submit">
-        🚀 ¡Comenzar mi aventura!
-      </button>
-
+      <button type="submit">🚀 ¡Comenzar mi aventura!</button>
     </form>
 
-    <section id="resultado">
+    <section id="resultado" aria-live="polite">
       <h2 id="tituloMundo"></h2>
       <p id="descripcionMundo"></p>
+      <button id="entrarMundo" type="button">🌈 ¡Entrar al Valle!</button>
+      <p id="proximamente" class="proximamente" hidden>Este mundo se habilitará en una próxima misión.</p>
     </section>
-
   </main>
 
   <script>
@@ -198,113 +91,70 @@
     const resultado = document.getElementById("resultado");
     const tituloMundo = document.getElementById("tituloMundo");
     const descripcionMundo = document.getElementById("descripcionMundo");
+    const entrarMundo = document.getElementById("entrarMundo");
+    const proximamente = document.getElementById("proximamente");
 
     const mundos = {
-      1: {
-        nombre: "🌈 El Valle de los Números",
-        descripcion:
-          "Aquí conoceremos números, contaremos objetos y resolveremos sumas y restas muy divertidas."
-      },
-
-      2: {
-        nombre: "🌴 La Selva Matemática",
-        descripcion:
-          "Exploraremos la selva resolviendo sumas, restas y descubriendo las tablas del 1, 2, 3 y 5."
-      },
-
-      3: {
-        nombre: "🚀 La Galaxia de las Tablas",
-        descripcion:
-          "Viajaremos por planetas matemáticos mientras practicamos las tablas del 4, 6, 7 y 8."
-      },
-
-      4: {
-        nombre: "🏙️ La Ciudad de los Maestros",
-        descripcion:
-          "Resolveremos grandes desafíos con las tablas del 9 y 10 y repasaremos todas las tablas."
-      }
+      1: { nombre: "🌈 El Valle de los Números", descripcion: "Aquí conoceremos números, contaremos objetos y resolveremos sumas y restas muy divertidas." },
+      2: { nombre: "🌴 La Selva Matemática", descripcion: "Exploraremos la selva resolviendo sumas, restas y descubriendo las tablas del 1, 2, 3 y 5." },
+      3: { nombre: "🚀 La Galaxia de las Tablas", descripcion: "Viajaremos por planetas matemáticos mientras practicamos las tablas del 4, 6, 7 y 8." },
+      4: { nombre: "🏙️ La Ciudad de los Maestros", descripcion: "Resolveremos grandes desafíos con las tablas del 9 y 10 y repasaremos todas las tablas." }
     };
 
     function obtenerMundo(edad) {
       if (edad <= 5) return 1;
       if (edad <= 7) return 2;
       if (edad === 8) return 3;
-
       return 4;
     }
 
     function hablar(texto) {
       if (!("speechSynthesis" in window)) return;
-
       window.speechSynthesis.cancel();
-
       const mensaje = new SpeechSynthesisUtterance(texto);
-
       mensaje.lang = "es-CO";
       mensaje.rate = 0.9;
       mensaje.pitch = 1.15;
       mensaje.volume = 1;
-
       window.speechSynthesis.speak(mensaje);
     }
 
     function bienvenidaInicial() {
-      hablar(
-        "¡Hola! Soy IAM. Bienvenido a 123 IAM. " +
-        "Vamos a vivir una increíble aventura matemática. " +
-        "Primero dime cómo te llamas y cuántos años tienes."
-      );
+      hablar("¡Hola! Soy IAM. Bienvenido a 123 IAM. Vamos a vivir una increíble aventura matemática. Primero dime cómo te llamas y cuántos años tienes.");
     }
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-
-      const nombre = document
-        .getElementById("nombre")
-        .value
-        .trim();
-
-      const edad = Number(
-        document.getElementById("edad").value
-      );
-
+      const nombre = document.getElementById("nombre").value.trim();
+      const edad = Number(document.getElementById("edad").value);
       if (!nombre || !edad) return;
 
       const numeroMundo = obtenerMundo(edad);
       const mundo = mundos[numeroMundo];
-
-      tituloMundo.textContent =
-        `¡${nombre}, tu aventura comienza en ${mundo.nombre}!`;
-
-      descripcionMundo.textContent =
-        mundo.descripcion;
-
+      tituloMundo.textContent = `¡${nombre}, tu aventura comienza en ${mundo.nombre}!`;
+      descripcionMundo.textContent = mundo.descripcion;
       resultado.style.display = "block";
 
-      hablar(
-        `¡Excelente, ${nombre}! ` +
-        `Tienes ${edad} años. ` +
-        `Tu aventura comienza en ${mundo.nombre}. ` +
-        `${mundo.descripcion} ` +
-        "¡Vamos a jugar!"
-      );
+      const player = { nombre, edad, mundo: numeroMundo, creadoEn: new Date().toISOString() };
+      localStorage.setItem("123iam_player", JSON.stringify(player));
 
-      localStorage.setItem(
-        "123iam_player",
-        JSON.stringify({
-          nombre,
-          edad,
-          mundo: numeroMundo,
-          creadoEn: new Date().toISOString()
-        })
-      );
+      if (numeroMundo === 1) {
+        entrarMundo.style.display = "block";
+        proximamente.hidden = true;
+      } else {
+        entrarMundo.style.display = "none";
+        proximamente.hidden = false;
+      }
+
+      hablar(`¡Excelente, ${nombre}! Tienes ${edad} años. Tu aventura comienza en ${mundo.nombre}. ${mundo.descripcion} ¡Vamos a jugar!`);
     });
 
-    window.addEventListener(
-      "load",
-      bienvenidaInicial
-    );
-  </script>
+    entrarMundo.addEventListener("click", () => {
+      hablar("¡Vamos al Valle de los Números!");
+      window.setTimeout(() => { window.location.href = "mundo1.html"; }, 250);
+    });
 
+    window.addEventListener("load", bienvenidaInicial);
+  </script>
 </body>
 </html>

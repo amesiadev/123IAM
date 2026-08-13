@@ -36,6 +36,8 @@ input:focus,select:focus{border-color:var(--p);box-shadow:0 0 0 4px rgba(108,92,
 .space .equation-strip{color:#fff}.space .math-group{background:rgba(255,255,255,.13);border-color:#ada5ff;box-shadow:0 5px 0 rgba(0,0,0,.2);color:#fff}
 .planet-grid{display:grid;gap:7px;justify-content:center;margin:8px auto}.planet{width:clamp(24px,6vw,38px);height:clamp(24px,6vw,38px);display:grid;place-items:center;border-radius:50%;background:#ffd166;box-shadow:0 0 0 3px rgba(255,255,255,.22);animation:pop .25s ease both}
 .timer{display:none;width:max-content;margin:0 auto 10px;padding:7px 14px;border-radius:999px;background:#eae7ff;color:#4a3db4;font-weight:950}.timer.show{display:block}.timer.low{background:#fff1c4;color:#8b5d00;animation:pulse .8s ease-in-out infinite}
+.visual.city{background:linear-gradient(180deg,#bcecff 0 58%,#f1d08b 58% 100%);border-color:#a8d9e8;color:#243047}
+.city-scene{width:100%;display:flex;align-items:flex-end;justify-content:center;gap:10px;flex-wrap:wrap;padding:8px}.building{min-width:68px;padding:10px 8px;border-radius:14px 14px 5px 5px;background:#fff;border:3px solid #6c5ce7;box-shadow:0 6px 0 #c8c1ff;font-weight:950}.building small{display:block;margin-top:4px;color:#667085}.problem-card{max-width:620px;padding:16px;border-radius:18px;background:#fff;border:3px dashed #6c5ce7;font-weight:850;line-height:1.45}.master-badge{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:999px;background:#fff2b2;color:#6d5200;font-weight:950}
 .answers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:17px}.answers.two{grid-template-columns:repeat(2,1fr)}
 .answer{min-height:78px;border-radius:21px;background:#fff5c8;color:#5b4600;font-size:clamp(1.55rem,6vw,2.25rem);font-weight:950;box-shadow:0 7px 0 #e4b112}
 .answer:active{transform:translateY(4px);box-shadow:0 3px 0 #e4b112}.answer.good{background:#dcf9e7;color:#176c39;box-shadow:0 7px 0 #7ad69b}
@@ -65,7 +67,7 @@ const mundos={
 1:{name:"🌈 El Valle de los Números",desc:"Aquí conoceremos números, contaremos objetos y resolveremos sumas y restas muy divertidas.",art:"🦊🔢",bg:"linear-gradient(180deg,#8be7ff 0 58%,#9ee57a 58% 100%)",rounds:8,kicker:"🌈 El Valle de los Números"},
 2:{name:"🌴 La Selva Matemática",desc:"Exploraremos la selva resolviendo sumas y restas de dos dígitos y descubriendo las tablas del 1, 2, 3 y 5.",art:"🐒🌴",bg:"linear-gradient(180deg,#77d6ff 0 52%,#62c86e 52% 100%)",rounds:10,kicker:"🌴 La Selva Matemática"},
 3:{name:"🚀 La Galaxia de las Tablas",desc:"Viajaremos por planetas matemáticos con retos de velocidad, precisión y lógica espacial mientras practicamos las tablas del 4, 6, 7 y 8.",art:"🚀🪐",bg:"radial-gradient(circle at 30% 20%,#6358c7,#211657 70%)",rounds:10,kicker:"🚀 La Galaxia de las Tablas"},
-4:{name:"🏙️ La Ciudad de los Maestros",desc:"Resolveremos grandes desafíos con las tablas del 9 y 10 y repasaremos todas las tablas.",art:"🏙️🏆",bg:"linear-gradient(180deg,#79d7ff 0 55%,#e7bd76 55% 100%)",rounds:10,kicker:"🏙️ La Ciudad de los Maestros"}
+4:{name:"🏙️ La Ciudad de los Maestros",desc:"Resolveremos problemas aplicados, dominaremos las tablas del 9 y 10 y pondremos a prueba todas las tablas del 1 al 10.",art:"🏙️🏆",bg:"linear-gradient(180deg,#79d7ff 0 55%,#e7bd76 55% 100%)",rounds:12,kicker:"🏙️ La Ciudad de los Maestros"}
 };
 const objects=[{e:"🍎",n:"manzanas"},{e:"⭐",n:"estrellas"},{e:"🐞",n:"mariquitas"},{e:"🌼",n:"flores"},{e:"🦋",n:"mariposas"},{e:"🍓",n:"fresas"},{e:"🥭",n:"mangos"},{e:"🐒",n:"monitos"}];
 const good=["¡Fantástico! 🌟","¡Lo hiciste genial! 🎉","¡Muy bien, explorador! 🚀","¡Excelente trabajo! ⭐"];
@@ -91,6 +93,7 @@ function configureWorld(){
  if(player.mundo===1){$("enterWorld").textContent="🌟 ¡Entrar al Valle!";$("enterWorld").disabled=false;$("worldNote").textContent="Misión disponible: conteo, suma y resta hasta 10."}
  else if(player.mundo===2){$("enterWorld").textContent="🌴 ¡Explorar la Selva!";$("enterWorld").disabled=false;$("worldNote").textContent="Misión disponible: suma, resta y multiplicación como suma repetida."}
  else if(player.mundo===3){$("enterWorld").textContent="🚀 ¡Despegar a la Galaxia!";$("enterWorld").disabled=false;$("worldNote").textContent="Misión disponible: tablas 4, 6, 7 y 8 con velocidad, precisión y lógica espacial."}
+ else if(player.mundo===4){$("enterWorld").textContent="🏙️ ¡Entrar a la Ciudad!";$("enterWorld").disabled=false;$("worldNote").textContent="Misión de maestría: tablas 9 y 10, repaso 1–10, factores faltantes y problemas aplicados."}
  else{$("enterWorld").textContent="🔒 Mundo en preparación";$("enterWorld").disabled=true;$("worldNote").textContent="Este mundo ya está asignado a tu perfil y se habilitará en una próxima etapa."}
 }
 function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
@@ -117,13 +120,36 @@ function challengeWorld3(){
  if(missing)return{world:3,type:"spatial",mode:"missing",a:table,b:factor,total:table*factor,answer:factor,maxOption:10,q:`🪐 ${table} filas forman ${table*factor} planetas. ¿Cuántas columnas hay?`,speech:`Constelación espacial. Hay ${table} filas y ${table*factor} planetas en total. ¿Cuántas columnas tiene la constelación?`};
  return{world:3,type:"spatial",mode:"total",a:table,b:factor,answer:table*factor,maxOption:80,q:`🪐 ${table} filas de ${factor} planetas. ¿Cuántos hay?`,speech:`Constelación espacial. Observa ${table} filas con ${factor} planetas en cada fila. ¿Cuántos planetas hay en total?`}
 }
-function challenge(){if(player.mundo===3)return challengeWorld3();if(player.mundo===2)return challengeWorld2();return challengeWorld1()}
+function challengeWorld4(){
+ const type=pick(["master","master","review","missing","problem"]);
+ if(type==="master"){
+   const table=pick([9,10]),factor=ri(2,10);
+   return{world:4,type,a:table,b:factor,answer:table*factor,maxOption:100,q:`🏆 ${table} × ${factor} = ¿cuánto?`,speech:`Desafío de maestro. ¿Cuánto es ${table} por ${factor}?`}
+ }
+ if(type==="review"){
+   const table=ri(1,10),factor=ri(2,10);
+   return{world:4,type,a:table,b:factor,answer:table*factor,maxOption:100,q:`🧠 Repaso total: ${table} × ${factor} = ¿cuánto?`,speech:`Repaso de la ciudad. ¿Cuánto es ${table} por ${factor}?`}
+ }
+ if(type==="missing"){
+   const table=ri(2,10),factor=ri(2,10),total=table*factor;
+   return{world:4,type,a:table,b:factor,total,answer:factor,maxOption:10,q:`🔎 ${table} × ? = ${total}. ¿Qué número falta?`,speech:`Encuentra el factor perdido. ${table} por qué número es igual a ${total}?`}
+ }
+ const context=pick([
+   {icon:"🚌",thing:"autobuses",unit:"niños"},
+   {icon:"🏢",thing:"edificios",unit:"ventanas"},
+   {icon:"🌳",thing:"parques",unit:"árboles"},
+   {icon:"🚲",thing:"estaciones",unit:"bicicletas"}
+ ]);
+ const groups=ri(2,8),each=pick([3,4,5,6,7,8,9,10]),total=groups*each;
+ return{world:4,type:"problem",a:groups,b:each,answer:total,maxOption:80,context,q:`${context.icon} Hay ${groups} ${context.thing} con ${each} ${context.unit} en cada uno. ¿Cuántos ${context.unit} hay en total?`,speech:`Problema de la ciudad. Hay ${groups} ${context.thing} con ${each} ${context.unit} en cada uno. ¿Cuántos ${context.unit} hay en total?`}
+}
+function challenge(){if(player.mundo===4)return challengeWorld4();if(player.mundo===3)return challengeWorld3();if(player.mundo===2)return challengeWorld2();return challengeWorld1()}
 function planetGrid(rows,cols){
  const cells=Array.from({length:rows*cols},(_,i)=>`<span class="planet" style="animation-delay:${i*20}ms">•</span>`).join("");
  return `<div><div class="planet-grid" style="grid-template-columns:repeat(${cols},auto)">${cells}</div><div class="equation-strip">${rows} filas × ${cols} columnas</div></div>`
 }
 function renderVisual(c){
- const box=$("visual");box.classList.toggle("space",c.world===3);
+ const box=$("visual");box.classList.toggle("space",c.world===3);box.classList.toggle("city",c.world===4);
  if(c.world===1){
    if(c.type==="count"){box.innerHTML=obj(c.a,c.o.e);return}
    if(c.type==="add"){box.innerHTML=`<span>${obj(c.a,c.o.e)}</span><span class="symbol">+</span><span>${obj(c.b,c.o.e)}</span>`;return}
@@ -135,10 +161,19 @@ function renderVisual(c){
    const groups=Array.from({length:c.b},()=>`<div class="math-group">${obj(c.a,c.o.e)}</div>`).join(""),repeated=Array.from({length:c.b},()=>c.a).join(" + ");
    box.innerHTML=`<div><div class="group-wrap">${groups}</div><div class="equation-strip">${repeated} = ?</div></div>`;return
  }
- if(c.type==="spatial"){box.innerHTML=planetGrid(c.a,c.b);return}
- box.innerHTML=`<div><div style="font-size:clamp(3rem,14vw,6rem)">🚀</div><div class="equation-strip">${c.a} × ${c.b} = ?</div></div>`
+ if(c.world===3){
+   if(c.type==="spatial"){box.innerHTML=planetGrid(c.a,c.b);return}
+   box.innerHTML=`<div><div style="font-size:clamp(3rem,14vw,6rem)">🚀</div><div class="equation-strip">${c.a} × ${c.b} = ?</div></div>`;return
+ }
+ if(c.type==="problem"){
+   box.innerHTML=`<div class="problem-card"><div style="font-size:2.4rem">${c.context.icon}</div>${c.a} ${c.context.thing} × ${c.b} ${c.context.unit} cada uno</div>`;return
+ }
+ if(c.type==="missing"){
+   box.innerHTML=`<div class="city-scene"><div class="building">${c.a}<small>grupos</small></div><span class="symbol">×</span><div class="building">?<small>en cada grupo</small></div><span class="symbol">=</span><div class="building">${c.total}<small>total</small></div></div>`;return
+ }
+ box.innerHTML=`<div class="city-scene"><div class="building">${c.a}<small>tabla</small></div><span class="symbol">×</span><div class="building">${c.b}<small>factor</small></div><span class="symbol">=</span><div class="building">?<small>resultado</small></div></div>`
 }
-function optionRange(){if(player.mundo===1)return{min:0,max:10,delta:3};if(player.mundo===3)return{min:0,max:current?.maxOption||80,delta:current?.maxOption===10?3:12};return{min:0,max:current?.maxOption||99,delta:10}}
+function optionRange(){if(player.mundo===1)return{min:0,max:10,delta:3};if(player.mundo===4)return{min:0,max:current?.maxOption||100,delta:current?.maxOption===10?3:15};if(player.mundo===3)return{min:0,max:current?.maxOption||80,delta:current?.maxOption===10?3:12};return{min:0,max:current?.maxOption||99,delta:10}}
 function options(ans,n=3){
  const {min,max,delta}=optionRange(),s=new Set([ans]);let guard=0;
  while(s.size<n&&guard++<100){const v=Math.max(min,Math.min(max,ans+ri(-delta,delta)));if(v!==ans)s.add(v)}
@@ -201,9 +236,31 @@ function hintWorld3(){
  $("hint").innerHTML=`<div>💡 Puedes transformar la multiplicación en una suma repetida.</div><div class="hint-count"><span>${repeated}</span><span>=</span><span>${current.answer}</span></div>`;
  return`Pista galáctica: suma ${current.a}, ${current.b} veces. El resultado es ${current.answer}.`
 }
+function hintWorld4(){
+ if(current.type==="missing"){
+   $("hint").innerHTML=`<div>💡 Busca cuántas veces cabe ${current.a} dentro de ${current.total}.</div><div class="hint-count"><span>${current.total}</span><span>÷</span><span>${current.a}</span><span>=</span><span>${current.answer}</span></div>`;
+   return`Pista de maestro: divide ${current.total} entre ${current.a}. El factor que falta es ${current.answer}.`
+ }
+ if(current.type==="problem"){
+   const repeated=Array.from({length:current.a},()=>current.b).join(" + ");
+   $("hint").innerHTML=`<div>💡 Convierte el problema en grupos iguales.</div><div class="hint-count"><span>${repeated}</span><span>=</span><span>${current.answer}</span></div>`;
+   return`Pista: tienes ${current.a} grupos de ${current.b}. Puedes sumar ${current.b}, ${current.a} veces.`
+ }
+ if(current.a===9){
+   $("hint").innerHTML=`<div>💡 Truco del 9: multiplica por 10 y luego resta una vez el factor.</div><div class="hint-count"><span>10 × ${current.b}</span><span>−</span><span>${current.b}</span><span>=</span><span>${current.answer}</span></div>`;
+   return`Pista del nueve: diez por ${current.b} son ${10*current.b}; resta ${current.b} y obtienes ${current.answer}.`
+ }
+ if(current.a===10){
+   $("hint").innerHTML=`<div>💡 En la tabla del 10, agrega un cero al factor.</div><div class="hint-count"><span>${current.b}</span><span>→</span><span>${current.answer}</span></div>`;
+   return`Pista del diez: agrega un cero a ${current.b}. Obtienes ${current.answer}.`
+ }
+ const repeated=Array.from({length:current.b},()=>current.a).join(" + ");
+ $("hint").innerHTML=`<div>💡 Recuerda: multiplicar es formar grupos iguales.</div><div class="hint-count"><span>${repeated}</span><span>=</span><span>${current.answer}</span></div>`;
+ return`Pista de repaso: suma ${current.a}, ${current.b} veces.`
+}
 function hint(auto=false){
  if(!current||$("hint").classList.contains("show"))return;
- hints++;const text=player.mundo===3?hintWorld3():player.mundo===2?hintWorld2():hintWorld1();$("hint").classList.add("show");
+ hints++;const text=player.mundo===4?hintWorld4():player.mundo===3?hintWorld3():player.mundo===2?hintWorld2():hintWorld1();$("hint").classList.add("show");
  let other=options(current.answer).find(v=>v!==current.answer);if(other===undefined)other=Math.max(0,current.answer-1);
  renderAnswers(shuffle([current.answer,other]));speak(`${text} Ahora tienes solo dos opciones.`);
  if(auto)misses=Math.max(misses,2)
@@ -216,17 +273,19 @@ function finish(){
  p[key]=p[key]||{missionsCompleted:0,bestStars:0,hintsUsed:0};
  p[key].missionsCompleted++;p[key].bestStars=Math.max(p[key].bestStars||0,stars);p[key].hintsUsed=(p[key].hintsUsed||0)+hints;p[key].lastPlayedAt=new Date().toISOString();
  if(player.mundo===3)p[key].speedHits=(p[key].speedHits||0)+speedHits;
+ if(player.mundo===4&&stars===totalRounds())p[key].perfectMissions=(p[key].perfectMissions||0)+1;
  save(PROGRESS_KEY,p);
  $("correctStat").textContent=stars;$("hintStat").textContent=hints;
- const mascot={1:"🦊🏆",2:"🐒🏆",3:"🚀🏆"}[player.mundo]||"🏆";$("completeMascot").textContent=mascot;
- const place={1:"el Valle de los Números",2:"la Selva Matemática",3:"la Galaxia de las Tablas"}[player.mundo]||"tu mundo";
+ const mascot={1:"🦊🏆",2:"🐒🏆",3:"🚀🏆",4:"🏙️🏆"}[player.mundo]||"🏆";$("completeMascot").textContent=mascot;
+ const place={1:"el Valle de los Números",2:"la Selva Matemática",3:"la Galaxia de las Tablas",4:"la Ciudad de los Maestros"}[player.mundo]||"tu mundo";
  const speedText=player.mundo===3&&speedHits?` Activaste ${speedHits} pulso${speedHits===1?"":"s"} de velocidad.`:"";
- $("completeMessage").textContent=`¡${player.nombre}, completaste tu recorrido por ${place}! Cada intento hizo crecer tu poder matemático.${speedText}`;
- show("complete");speak(`¡Misión completada, ${player.nombre}! Lograste ${stars} retos.${speedText} ¡Excelente aventura matemática!`)
+ const masteryText=player.mundo===4?(stars===totalRounds()?" ¡Medalla de Maestría Perfecta! 🥇":stars>=9?" ¡Ganaste la Medalla de Maestro Matemático! 🏅":" Seguiste construyendo tu maestría matemática. 🌟"):"";
+ $("completeMessage").textContent=`¡${player.nombre}, completaste tu recorrido por ${place}! Cada intento hizo crecer tu poder matemático.${speedText}${masteryText}`;
+ show("complete");speak(`¡Misión completada, ${player.nombre}! Lograste ${stars} retos.${speedText}${masteryText} ¡Excelente aventura matemática!`)
 }
 $("playerForm").onsubmit=e=>{e.preventDefault();const nombre=$("nombre").value.trim(),edad=Number($("edad").value);if(!nombre||!edad)return;player={nombre,edad,mundo:mundo(edad),creadoEn:new Date().toISOString()};save(PLAYER_KEY,player);configureWorld();show("world");const w=mundos[player.mundo];speak(`¡Excelente, ${nombre}! Tu aventura comienza en ${w.name}. ${w.desc}`)};
 $("listenWelcome").onclick=welcome;
-$("enterWorld").onclick=()=>{if(player&&player.mundo<=3)startGame()};
+$("enterWorld").onclick=()=>{if(player&&player.mundo<=4)startGame()};
 $("changePlayer").onclick=()=>{clearTimer();player=null;try{localStorage.removeItem(PLAYER_KEY)}catch{}$("nombre").value="";$("edad").value="";show("setup");setTimeout(welcome,200)};
 $("home").onclick=()=>{clearTimer();if("speechSynthesis" in window)window.speechSynthesis.cancel();configureWorld();show("world")};
 $("repeat").onclick=()=>speak(current?.speech);

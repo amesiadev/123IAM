@@ -1,239 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#6c5ce7">
-<title>123IAM - Aventura Matemática</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6c5ce7"><title>123IAM - Aventura Matemática</title>
 <style>
-:root{--p:#6c5ce7;--pd:#4b39bf;--ink:#30354a;--muted:#667085;--yellow:#ffca28;--orange:#ff8a00;--green:#2ecc71;--space:#362a86}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{min-height:100%}
-body{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(160deg,#6dd5fa,#8e7dff);padding:max(14px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));overflow-x:hidden}
-button,input,select{font:inherit}button{touch-action:manipulation}.app{width:min(820px,100%)}.screen{display:none}.screen.active{display:block;animation:fade .35s ease}
-.card{background:rgba(255,255,255,.98);border-radius:30px;padding:clamp(20px,5vw,36px);text-align:center;box-shadow:0 20px 60px rgba(48,53,74,.2)}
-.mascot{font-size:clamp(70px,15vw,96px);line-height:1;animation:float 2s ease-in-out infinite}
-h1{font-size:clamp(2rem,8vw,3.5rem);color:#5746d9;margin:12px 0}h2{color:#5746d9}
-.intro{max-width:650px;margin:10px auto 22px;color:#4d5368;font-size:clamp(1rem,3.6vw,1.18rem);line-height:1.55}
-label{display:block;text-align:left;margin:17px 0 7px;font-size:1.08rem;font-weight:850}
-input,select{width:100%;min-height:60px;border:3px solid #dedcff;border-radius:18px;padding:12px 16px;font-size:1.15rem;background:#fff;outline:none}
-input:focus,select:focus{border-color:var(--p);box-shadow:0 0 0 4px rgba(108,92,231,.12)}
-.primary,.secondary,.icon,.answer{border:0;cursor:pointer}.primary{width:100%;min-height:66px;margin-top:23px;border-radius:20px;background:linear-gradient(135deg,#ffb703,#ff7b00);color:#fff;font-size:1.25rem;font-weight:950;box-shadow:0 8px 0 #d95f00}
-.primary:active{transform:translateY(5px);box-shadow:0 3px 0 #d95f00}.primary:disabled{filter:grayscale(.75);opacity:.65;cursor:not-allowed;box-shadow:none}
-.secondary{min-height:50px;padding:10px 18px;border-radius:16px;background:#eeeaff;color:var(--pd);font-weight:850}
-.world-badge{display:inline-block;padding:8px 14px;border-radius:999px;background:#eeeaff;color:var(--pd);font-weight:900;margin-bottom:14px}
-.world-art{min-height:180px;display:grid;place-items:center;margin:18px 0;border-radius:25px;font-size:clamp(60px,15vw,90px);overflow:hidden}
-.topbar{display:grid;grid-template-columns:auto 1fr auto;gap:11px;align-items:center;margin-bottom:18px}.icon{width:50px;height:50px;border-radius:15px;background:#eeeaff;color:var(--pd);font-size:1.3rem;font-weight:900}
-.progress-wrap{text-align:left;min-width:0}.progress-row{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:.86rem;font-weight:800;margin-bottom:6px}
-.track{height:14px;background:#eceefa;border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--yellow),var(--orange));border-radius:inherit;transition:width .3s ease}
-.stars{font-weight:900;color:#8b6700;white-space:nowrap}.challenge{padding:clamp(16px,4vw,28px);border-radius:25px;background:#fbfcff;border:3px solid #eceeff}
-.kicker{font-weight:900;color:var(--pd);margin-bottom:8px}.question{font-size:clamp(1.5rem,6vw,2.25rem);font-weight:950;min-height:58px;display:grid;place-items:center}
-.visual{min-height:125px;margin:12px 0 16px;padding:14px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;border-radius:22px;background:#f2fbff;border:3px solid #d8f2ff}
-.visual.space{background:radial-gradient(circle at 30% 20%,#5f56b5,#23185e 72%);border-color:#9187e7;color:#fff}
-.obj{font-size:clamp(32px,7vw,48px);display:inline-block;animation:pop .25s ease both}.obj.removed{opacity:.22;filter:grayscale(1)}.symbol{font-size:2.5rem;font-weight:950;color:var(--pd)}
-.group-wrap{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}.math-group{min-width:82px;min-height:76px;padding:8px 10px;display:flex;align-items:center;justify-content:center;gap:2px;flex-wrap:wrap;border-radius:18px;background:#fff;border:3px solid #bde8cb;box-shadow:0 5px 0 #8fd5a8}
-.equation-strip{width:100%;font-size:clamp(1.1rem,4vw,1.45rem);font-weight:900;color:#356443;margin-top:6px}
-.space .equation-strip{color:#fff}.space .math-group{background:rgba(255,255,255,.13);border-color:#ada5ff;box-shadow:0 5px 0 rgba(0,0,0,.2);color:#fff}
-.planet-grid{display:grid;gap:7px;justify-content:center;margin:8px auto}.planet{width:clamp(24px,6vw,38px);height:clamp(24px,6vw,38px);display:grid;place-items:center;border-radius:50%;background:#ffd166;box-shadow:0 0 0 3px rgba(255,255,255,.22);animation:pop .25s ease both}
-.timer{display:none;width:max-content;margin:0 auto 10px;padding:7px 14px;border-radius:999px;background:#eae7ff;color:#4a3db4;font-weight:950}.timer.show{display:block}.timer.low{background:#fff1c4;color:#8b5d00;animation:pulse .8s ease-in-out infinite}
-.answers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:17px}.answers.two{grid-template-columns:repeat(2,1fr)}
-.answer{min-height:78px;border-radius:21px;background:#fff5c8;color:#5b4600;font-size:clamp(1.55rem,6vw,2.25rem);font-weight:950;box-shadow:0 7px 0 #e4b112}
-.answer:active{transform:translateY(4px);box-shadow:0 3px 0 #e4b112}.answer.good{background:#dcf9e7;color:#176c39;box-shadow:0 7px 0 #7ad69b}
-.feedback{min-height:48px;margin-top:13px;display:grid;place-items:center;font-size:1.08rem;font-weight:850}
-.hint{display:none;margin-top:10px;padding:14px;border-radius:17px;background:#fff3c4;color:#6d5200;font-weight:800;line-height:1.45}.hint.show{display:block;animation:pop .25s ease}
-.hint-count{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-top:10px}.hint-count span{min-width:37px;height:37px;padding:0 7px;display:grid;place-items:center;border-radius:50%;background:#fff;color:#5f4800}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.stat{padding:18px;border-radius:18px;background:#f5f3ff}.stat strong{display:block;font-size:2rem;color:var(--pd)}
-.note{font-size:.95rem;color:var(--muted);margin-top:12px}
-@media(max-width:560px){.answers,.answers.two{grid-template-columns:1fr}.world-art{min-height:140px}.visual{min-height:105px}.topbar{grid-template-columns:46px 1fr auto}.icon{width:46px;height:46px}.math-group{min-width:70px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}@keyframes pop{from{opacity:0;transform:scale(.75)}to{opacity:1;transform:scale(1)}}@keyframes pulse{50%{transform:scale(1.06)}}
+*{box-sizing:border-box}body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:14px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#30354a;background:linear-gradient(160deg,#6dd5fa,#8e7dff)}button,input,select{font:inherit}.app{width:min(820px,100%)}.screen{display:none}.screen.active{display:block}.card{background:#fff;border-radius:30px;padding:clamp(20px,5vw,36px);text-align:center;box-shadow:0 20px 60px #30354a33}.mascot{font-size:80px;animation:float 2s ease-in-out infinite}h1,h2{color:#5746d9}.intro{max-width:650px;margin:10px auto 22px;line-height:1.55;color:#4d5368}label{display:block;text-align:left;font-weight:850;margin:15px 0 7px}input,select{width:100%;min-height:58px;border:3px solid #dedcff;border-radius:18px;padding:12px 16px;background:#fff}.primary,.secondary,.icon,.answer{border:0;cursor:pointer}.primary{width:100%;min-height:64px;margin-top:20px;border-radius:20px;background:linear-gradient(135deg,#ffb703,#ff7b00);color:#fff;font-weight:950;font-size:1.2rem;box-shadow:0 7px 0 #d95f00}.primary:disabled{opacity:.55;box-shadow:none}.secondary{min-height:48px;padding:10px 16px;border-radius:15px;background:#eeeaff;color:#4b39bf;font-weight:850}.world-badge,.timer{display:inline-block;padding:8px 14px;border-radius:999px;background:#eeeaff;color:#4b39bf;font-weight:900}.world-art{min-height:160px;display:grid;place-items:center;margin:16px 0;border-radius:24px;font-size:76px}.topbar{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin-bottom:16px}.icon{width:48px;height:48px;border-radius:15px;background:#eeeaff;font-size:1.25rem}.track{height:13px;background:#eceefa;border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,#ffca28,#ff8a00)}.progress-row{display:flex;justify-content:space-between;color:#667085;font-size:.85rem;font-weight:800;margin-bottom:5px}.stars{font-weight:900;color:#8b6700}.challenge{padding:clamp(15px,4vw,26px);border:3px solid #eceeff;border-radius:24px;background:#fbfcff}.kicker{font-weight:900;color:#4b39bf}.question{min-height:58px;display:grid;place-items:center;font-size:clamp(1.45rem,6vw,2.2rem);font-weight:950}.visual{min-height:125px;margin:10px 0 15px;padding:14px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;border-radius:20px;background:#f2fbff;border:3px solid #d8f2ff}.visual.space{background:radial-gradient(circle,#5f56b5,#23185e 72%);color:#fff;border-color:#9187e7}.visual.city{background:linear-gradient(#bcecff 58%,#f1d08b 58%);border-color:#a8d9e8}.obj{font-size:40px}.removed{opacity:.2;filter:grayscale(1)}.symbol{font-size:2rem;font-weight:950}.group{display:inline-flex;gap:2px;flex-wrap:wrap;padding:8px;border:3px solid #bde8cb;border-radius:16px;background:#fff}.planet-grid{display:grid;gap:7px;justify-content:center}.planet{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#ffd166}.city-row{display:flex;gap:9px;align-items:flex-end;justify-content:center;flex-wrap:wrap}.building{min-width:70px;padding:10px;border:3px solid #6c5ce7;border-radius:13px 13px 4px 4px;background:#fff;font-weight:950}.building small{display:block;color:#667085}.answers{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:15px}.answers.two{grid-template-columns:repeat(2,1fr)}.answer{min-height:74px;border-radius:20px;background:#fff5c8;color:#5b4600;font-size:1.9rem;font-weight:950;box-shadow:0 6px 0 #e4b112}.answer.good{background:#dcf9e7;color:#176c39}.feedback{min-height:45px;display:grid;place-items:center;margin-top:10px;font-weight:850}.hint{display:none;margin-top:9px;padding:13px;border-radius:16px;background:#fff3c4;color:#6d5200;font-weight:800;line-height:1.4}.hint.show{display:block}.hintline{margin-top:8px;font-size:1.05rem}.timer{display:none;margin-bottom:8px}.timer.show{display:inline-block}.timer.low{background:#fff1c4;color:#8b5d00}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.stat{padding:16px;border-radius:18px;background:#f5f3ff}.stat strong{display:block;font-size:2rem;color:#4b39bf}.note{color:#667085;font-size:.95rem}@media(max-width:560px){.answers,.answers.two{grid-template-columns:1fr}.topbar{grid-template-columns:48px 1fr auto}.world-art{min-height:130px}}@keyframes float{50%{transform:translateY(-8px)}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body>
-<main class="app">
-<section id="setup" class="screen active"><div class="card"><div class="mascot">🦊</div><h1>¡Hola! Soy IAM</h1><p class="intro">¡Bienvenido a <strong>123IAM</strong>! 🌟 Vamos a viajar por mundos increíbles mientras jugamos, contamos y aprendemos matemáticas.</p><form id="playerForm"><label for="nombre">¿Cómo te llamas?</label><input id="nombre" maxlength="20" autocomplete="off" placeholder="Escribe tu nombre" required><label for="edad">¿Cuántos años tienes?</label><select id="edad" required><option value="">Elige tu edad</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select><button class="primary" type="submit">🚀 ¡Comenzar mi aventura!</button></form><button id="listenWelcome" class="secondary" type="button" style="margin-top:16px">🔊 Escuchar a IAM</button></div></section>
-<section id="world" class="screen"><div class="card"><div id="worldBadge" class="world-badge"></div><h2 id="worldTitle"></h2><p id="worldDescription" class="intro"></p><div id="worldArt" class="world-art"></div><button id="enterWorld" class="primary" type="button"></button><p id="worldNote" class="note"></p><button id="changePlayer" class="secondary" type="button" style="margin-top:15px">👤 Cambiar jugador</button></div></section>
-<section id="game" class="screen"><div class="card"><div class="topbar"><button id="home" class="icon" type="button" aria-label="Volver al mundo">⌂</button><div class="progress-wrap"><div class="progress-row"><span id="roundText">Reto 1</span><span id="miniName"></span></div><div class="track"><div id="bar" class="bar"></div></div></div><div id="starCount" class="stars">⭐ 0</div></div><div class="challenge"><div id="gameKicker" class="kicker"></div><div id="timer" class="timer" aria-live="polite"></div><div id="question" class="question"></div><div id="visual" class="visual"></div><button id="repeat" class="secondary" type="button">🔊 Escuchar pregunta</button><div id="answers" class="answers"></div><div id="feedback" class="feedback" aria-live="polite"></div><div id="hint" class="hint" aria-live="polite"></div></div></div></section>
-<section id="complete" class="screen"><div class="card"><div id="completeMascot" class="mascot">🦊🏆</div><h1>¡Misión completada!</h1><p id="completeMessage" class="intro"></p><div class="stats"><div class="stat"><strong id="correctStat">0</strong><span>Retos logrados</span></div><div class="stat"><strong id="hintStat">0</strong><span>Pistas usadas</span></div></div><button id="again" class="primary" type="button">🎮 Jugar otra misión</button><button id="backWorld" class="secondary" type="button" style="margin-top:15px">🗺️ Volver al mundo</button></div></section>
-</main>
-<script>
+<body><main class="app">
+<section id="setup" class="screen active"><div class="card"><div class="mascot">🦊</div><h1>¡Hola! Soy IAM</h1><p class="intro">¡Bienvenido a <b>123IAM</b>! 🌟 Vamos a viajar por mundos increíbles mientras jugamos y aprendemos matemáticas.</p><form id="playerForm"><label>¿Cómo te llamas?</label><input id="nombre" maxlength="20" autocomplete="off" required placeholder="Escribe tu nombre"><label>¿Cuántos años tienes?</label><select id="edad" required><option value="">Elige tu edad</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select><button class="primary">🚀 ¡Comenzar mi aventura!</button></form><button id="listenWelcome" class="secondary" style="margin-top:15px">🔊 Escuchar a IAM</button></div></section>
+<section id="world" class="screen"><div class="card"><div id="worldBadge" class="world-badge"></div><h2 id="worldTitle"></h2><p id="worldDescription" class="intro"></p><div id="worldArt" class="world-art"></div><button id="enterWorld" class="primary"></button><p id="worldNote" class="note"></p><button id="changePlayer" class="secondary">👤 Cambiar jugador</button></div></section>
+<section id="game" class="screen"><div class="card"><div class="topbar"><button id="home" class="icon">⌂</button><div><div class="progress-row"><span id="roundText"></span><span id="miniName"></span></div><div class="track"><div id="bar" class="bar"></div></div></div><div id="starCount" class="stars">⭐ 0</div></div><div class="challenge"><div id="gameKicker" class="kicker"></div><div id="timer" class="timer"></div><div id="question" class="question"></div><div id="visual" class="visual"></div><button id="repeat" class="secondary">🔊 Escuchar pregunta</button><div id="answers" class="answers"></div><div id="feedback" class="feedback" aria-live="polite"></div><div id="hint" class="hint"></div></div></div></section>
+<section id="complete" class="screen"><div class="card"><div id="completeMascot" class="mascot">🏆</div><h1>¡Misión completada!</h1><p id="completeMessage" class="intro"></p><div class="stats"><div class="stat"><strong id="correctStat">0</strong>Retos logrados</div><div class="stat"><strong id="hintStat">0</strong>Pistas usadas</div></div><button id="again" class="primary">🎮 Jugar otra misión</button><button id="backWorld" class="secondary" style="margin-top:14px">🗺️ Volver al mundo</button></div></section>
+</main><script>
 (()=>{
-const PLAYER_KEY="123iam_player",PROGRESS_KEY="123iam_progress";
-const $=id=>document.getElementById(id);
-const screens={setup:$("setup"),world:$("world"),game:$("game"),complete:$("complete")};
-const mundos={
-1:{name:"🌈 El Valle de los Números",desc:"Aquí conoceremos números, contaremos objetos y resolveremos sumas y restas muy divertidas.",art:"🦊🔢",bg:"linear-gradient(180deg,#8be7ff 0 58%,#9ee57a 58% 100%)",rounds:8,kicker:"🌈 El Valle de los Números"},
-2:{name:"🌴 La Selva Matemática",desc:"Exploraremos la selva resolviendo sumas y restas de dos dígitos y descubriendo las tablas del 1, 2, 3 y 5.",art:"🐒🌴",bg:"linear-gradient(180deg,#77d6ff 0 52%,#62c86e 52% 100%)",rounds:10,kicker:"🌴 La Selva Matemática"},
-3:{name:"🚀 La Galaxia de las Tablas",desc:"Viajaremos por planetas matemáticos con retos de velocidad, precisión y lógica espacial mientras practicamos las tablas del 4, 6, 7 y 8.",art:"🚀🪐",bg:"radial-gradient(circle at 30% 20%,#6358c7,#211657 70%)",rounds:10,kicker:"🚀 La Galaxia de las Tablas"},
-4:{name:"🏙️ La Ciudad de los Maestros",desc:"Resolveremos grandes desafíos con las tablas del 9 y 10 y repasaremos todas las tablas.",art:"🏙️🏆",bg:"linear-gradient(180deg,#79d7ff 0 55%,#e7bd76 55% 100%)",rounds:10,kicker:"🏙️ La Ciudad de los Maestros"}
-};
-const objects=[{e:"🍎",n:"manzanas"},{e:"⭐",n:"estrellas"},{e:"🐞",n:"mariquitas"},{e:"🌼",n:"flores"},{e:"🦋",n:"mariposas"},{e:"🍓",n:"fresas"},{e:"🥭",n:"mangos"},{e:"🐒",n:"monitos"}];
-const good=["¡Fantástico! 🌟","¡Lo hiciste genial! 🎉","¡Muy bien, explorador! 🚀","¡Excelente trabajo! ⭐"];
-const gentle=["¡Casi! Inténtalo otra vez 💪","¡Buen intento! Vamos una vez más 🌟","¡Vas muy bien! Mira con calma 😊"];
-let player=load(PLAYER_KEY,null),current=null,round=0,stars=0,hints=0,misses=0,locked=false;
-let timerId=null,timerStartId=null,timeLeft=0,speedHits=0;
-function load(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch{return f}}
-function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
-function show(name){Object.entries(screens).forEach(([k,v])=>v.classList.toggle("active",k===name));window.scrollTo({top:0,behavior:"smooth"})}
-function mundo(edad){if(edad<=5)return 1;if(edad<=7)return 2;if(edad===8)return 3;return 4}
-function totalRounds(){return mundos[player?.mundo]?.rounds||8}
-function speak(text){if(!("speechSynthesis" in window)||!text)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="es-CO";u.rate=player?.mundo===1?.88:.92;u.pitch=1.1;u.volume=1;window.speechSynthesis.speak(u)}
-function welcome(){speak("¡Hola! Soy IAM. Bienvenido a 123 IAM. Primero dime cómo te llamas y cuántos años tienes.")}
-function configureWorld(){
- if(!player)return;
- const w=mundos[player.mundo];
- $("worldBadge").textContent=`Mundo ${player.mundo}`;
- $("worldTitle").textContent=`¡${player.nombre}, tu aventura comienza en ${w.name}!`;
- $("worldDescription").textContent=w.desc;
- $("worldArt").textContent=w.art;
- $("worldArt").style.background=w.bg;
- $("miniName").textContent=player.nombre;
- if(player.mundo===1){$("enterWorld").textContent="🌟 ¡Entrar al Valle!";$("enterWorld").disabled=false;$("worldNote").textContent="Misión disponible: conteo, suma y resta hasta 10."}
- else if(player.mundo===2){$("enterWorld").textContent="🌴 ¡Explorar la Selva!";$("enterWorld").disabled=false;$("worldNote").textContent="Misión disponible: suma, resta y multiplicación como suma repetida."}
- else if(player.mundo===3){$("enterWorld").textContent="🚀 ¡Despegar a la Galaxia!";$("enterWorld").disabled=false;$("worldNote").textContent="Misión disponible: tablas 4, 6, 7 y 8 con velocidad, precisión y lógica espacial."}
- else{$("enterWorld").textContent="🔒 Mundo en preparación";$("enterWorld").disabled=true;$("worldNote").textContent="Este mundo ya está asignado a tu perfil y se habilitará en una próxima etapa."}
-}
-function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
-function pick(a){return a[ri(0,a.length-1)]}
-function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}
-function obj(n,e,removed=false){return Array.from({length:n},(_,i)=>`<span class="obj${removed?" removed":""}" style="animation-delay:${i*35}ms">${e}</span>`).join("")}
-function challengeWorld1(){
- const type=pick(["count","add","sub"]),o=pick(objects.slice(0,6));
- if(type==="count"){const a=ri(1,10);return{world:1,type,a,b:0,answer:a,o,maxOption:10,q:`¿Cuántas ${o.n} ves?`,speech:`¿Cuántas ${o.n} ves? Cuenta con calma y toca el número correcto.`}}
- if(type==="add"){const a=ri(1,6),b=ri(1,10-a);return{world:1,type,a,b,answer:a+b,o,maxOption:10,q:`${a} + ${b} = ¿cuánto?`,speech:`Tenemos ${a} ${o.n} y llegan ${b} más. ¿Cuántas hay ahora?`}}
- const a=ri(2,10),b=ri(1,a);return{world:1,type,a,b,answer:a-b,o,maxOption:10,q:`${a} − ${b} = ¿cuánto?`,speech:`Había ${a} ${o.n} y se fueron ${b}. ¿Cuántas quedan?`}
-}
-function challengeWorld2(){
- const age=player.edad,type=pick(["add2","sub2","mult","mult"]);
- if(type==="add2"){const max=age===6?49:79,a=ri(10,max),b=ri(10,Math.min(max,99-a));return{world:2,type,a,b,answer:a+b,maxOption:99,q:`${a} + ${b} = ¿cuánto?`,speech:`Cruza el río de la suma. ¿Cuánto es ${a} más ${b}?`}}
- if(type==="sub2"){const max=age===6?69:99,a=ri(20,max),b=ri(10,a-1);return{world:2,type,a,b,answer:a-b,maxOption:99,q:`${a} − ${b} = ¿cuánto?`,speech:`Ayuda al explorador. ¿Cuánto es ${a} menos ${b}?`}}
- const table=pick([1,2,3,5]),factor=age===6?ri(1,6):ri(2,10),o=pick(objects.slice(6));return{world:2,type:"mult",a:table,b:factor,answer:table*factor,o,maxOption:50,q:`${factor} grupos de ${table} = ¿cuántos?`,speech:`Tenemos ${factor} grupos con ${table} ${o.n} en cada grupo. ¿Cuántos ${o.n} hay en total?`}
-}
-function challengeWorld3(){
- const table=pick([4,6,7,8]),factor=ri(2,10),type=pick(["speed","precision","spatial"]);
- if(type==="speed")return{world:3,type,a:table,b:factor,answer:table*factor,maxOption:80,q:`⚡ ${table} × ${factor} = ¿cuánto?`,speech:`Pulso orbital. ¿Cuánto es ${table} por ${factor}? Responde antes de que termine la energía, pero recuerda: aquí siempre puedes intentarlo de nuevo.`};
- if(type==="precision")return{world:3,type,a:table,b:factor,answer:table*factor,maxOption:80,q:`🎯 Señala el resultado de ${table} × ${factor}`,speech:`Radar de precisión. Encuentra el resultado de ${table} por ${factor}. Mira las opciones con atención.`};
- const missing=Math.random()<.45;
- if(missing)return{world:3,type:"spatial",mode:"missing",a:table,b:factor,total:table*factor,answer:factor,maxOption:10,q:`🪐 ${table} filas forman ${table*factor} planetas. ¿Cuántas columnas hay?`,speech:`Constelación espacial. Hay ${table} filas y ${table*factor} planetas en total. ¿Cuántas columnas tiene la constelación?`};
- return{world:3,type:"spatial",mode:"total",a:table,b:factor,answer:table*factor,maxOption:80,q:`🪐 ${table} filas de ${factor} planetas. ¿Cuántos hay?`,speech:`Constelación espacial. Observa ${table} filas con ${factor} planetas en cada fila. ¿Cuántos planetas hay en total?`}
-}
-function challenge(){if(player.mundo===3)return challengeWorld3();if(player.mundo===2)return challengeWorld2();return challengeWorld1()}
-function planetGrid(rows,cols){
- const cells=Array.from({length:rows*cols},(_,i)=>`<span class="planet" style="animation-delay:${i*20}ms">•</span>`).join("");
- return `<div><div class="planet-grid" style="grid-template-columns:repeat(${cols},auto)">${cells}</div><div class="equation-strip">${rows} filas × ${cols} columnas</div></div>`
-}
-function renderVisual(c){
- const box=$("visual");box.classList.toggle("space",c.world===3);
- if(c.world===1){
-   if(c.type==="count"){box.innerHTML=obj(c.a,c.o.e);return}
-   if(c.type==="add"){box.innerHTML=`<span>${obj(c.a,c.o.e)}</span><span class="symbol">+</span><span>${obj(c.b,c.o.e)}</span>`;return}
-   box.innerHTML=`<span>${obj(c.a-c.b,c.o.e)}${obj(c.b,c.o.e,true)}</span>`;return
- }
- if(c.world===2){
-   if(c.type==="add2"){const aT=Math.floor(c.a/10),aU=c.a%10,bT=Math.floor(c.b/10),bU=c.b%10;box.innerHTML=`<div><div class="equation-strip">Decenas y unidades</div><div class="group-wrap"><div class="math-group">🔟 × ${aT}<br>• × ${aU}</div><span class="symbol">+</span><div class="math-group">🔟 × ${bT}<br>• × ${bU}</div></div></div>`;return}
-   if(c.type==="sub2"){box.innerHTML=`<div><div class="equation-strip">Piensa cuánto falta para llegar de ${c.b} a ${c.a}</div><div class="group-wrap"><div class="math-group">${c.b}</div><span class="symbol">➜</span><div class="math-group">?</div><span class="symbol">➜</span><div class="math-group">${c.a}</div></div></div>`;return}
-   const groups=Array.from({length:c.b},()=>`<div class="math-group">${obj(c.a,c.o.e)}</div>`).join(""),repeated=Array.from({length:c.b},()=>c.a).join(" + ");
-   box.innerHTML=`<div><div class="group-wrap">${groups}</div><div class="equation-strip">${repeated} = ?</div></div>`;return
- }
- if(c.type==="spatial"){box.innerHTML=planetGrid(c.a,c.b);return}
- box.innerHTML=`<div><div style="font-size:clamp(3rem,14vw,6rem)">🚀</div><div class="equation-strip">${c.a} × ${c.b} = ?</div></div>`
-}
-function optionRange(){if(player.mundo===1)return{min:0,max:10,delta:3};if(player.mundo===3)return{min:0,max:current?.maxOption||80,delta:current?.maxOption===10?3:12};return{min:0,max:current?.maxOption||99,delta:10}}
-function options(ans,n=3){
- const {min,max,delta}=optionRange(),s=new Set([ans]);let guard=0;
- while(s.size<n&&guard++<100){const v=Math.max(min,Math.min(max,ans+ri(-delta,delta)));if(v!==ans)s.add(v)}
- for(let i=min;s.size<n&&i<=max;i++)s.add(i);
- return shuffle([...s]).slice(0,n)
-}
-function renderAnswers(values){
- const box=$("answers");box.innerHTML="";box.classList.toggle("two",values.length===2);
- values.forEach(v=>{const b=document.createElement("button");b.type="button";b.className="answer";b.textContent=v;b.setAttribute("aria-label",`Respuesta ${v}`);b.onclick=()=>choose(v,b);box.appendChild(b)})
-}
-function update(){const total=totalRounds();$("roundText").textContent=`Reto ${Math.min(round+1,total)} de ${total}`;$("bar").style.width=`${round/total*100}%`;$("starCount").textContent=`⭐ ${stars}`}
-function clearTimer(){
- if(timerId){clearInterval(timerId);timerId=null}
- if(timerStartId){clearTimeout(timerStartId);timerStartId=null}
- $("timer").classList.remove("show","low");$("timer").textContent=""
-}
-function startSpeedTimer(){
- if(locked||player?.mundo!==3||current?.type!=="speed")return;
- timeLeft=15;$("timer").textContent=`⏱️ ${timeLeft}`;$("timer").classList.add("show");
- timerId=setInterval(()=>{
-   timeLeft--;$("timer").textContent=`⏱️ ${Math.max(0,timeLeft)}`;$("timer").classList.toggle("low",timeLeft<=5);
-   if(timeLeft<=0){clearTimer();$("feedback").textContent="¡Recarga de energía! Te doy una pista para seguir 🚀";speak("¡Recarga de energía! No pasa nada. Te doy una pista para seguir.");hint(true)}
- },1000)
-}
-function next(){
- if(round>=totalRounds())return finish();
- clearTimer();locked=false;misses=0;current=challenge();
- $("gameKicker").textContent=mundos[player.mundo].kicker;$("question").textContent=current.q;$("feedback").textContent="";$("hint").classList.remove("show");$("hint").innerHTML="";
- renderVisual(current);renderAnswers(options(current.answer));update();speak(current.speech);
- if(current.world===3&&current.type==="speed")timerStartId=setTimeout(startSpeedTimer,1800)
-}
-function choose(v,button){
- if(locked||!current)return;
- if(v===current.answer){
-   if(current.world===3&&current.type==="speed"&&timerId&&timeLeft>0)speedHits++;
-   clearTimer();locked=true;button.classList.add("good");stars++;const m=pick(good);$("feedback").textContent=m;$("starCount").textContent=`⭐ ${stars}`;speak(`${m} La respuesta es ${current.answer}.`);round++;$("bar").style.width=`${round/totalRounds()*100}%`;setTimeout(next,1050);return
- }
- misses++;const m=pick(gentle);$("feedback").textContent=m;speak(m);
- if(button.animate)button.animate([{transform:"translateX(0)"},{transform:"translateX(-7px)"},{transform:"translateX(7px)"},{transform:"translateX(0)"}],{duration:280});
- if(misses>=2)hint(false)
-}
-function hintWorld1(){
- const a=current.answer,nums=Array.from({length:a},(_,i)=>`<span>${i+1}</span>`).join("");
- $("hint").innerHTML=`<div>💡 ${a===0?"No queda ningún objeto. Cuando no queda ninguno usamos el número cero.":"Vamos a contar juntos, despacito."}</div>${a>0?`<div class="hint-count">${nums}</div>`:""}`;
- return a>0?`Aquí tienes una pista. Contemos: ${Array.from({length:a},(_,i)=>i+1).join(", ")}. Ahora elige entre dos opciones.`:"Aquí tienes una pista. No queda ninguno. La respuesta puede ser cero."
-}
-function hintWorld2(){
- if(current.type==="mult"){const repeated=Array.from({length:current.b},()=>current.a).join(" + ");$("hint").innerHTML=`<div>💡 Multiplicar también es sumar el mismo número varias veces.</div><div class="hint-count"><span>${repeated}</span><span>=</span><span>${current.answer}</span></div>`;return`Pista: suma ${current.a}, ${current.b} veces. ${repeated}.`}
- const tensA=Math.floor(current.a/10),onesA=current.a%10,tensB=Math.floor(current.b/10),onesB=current.b%10;
- if(current.type==="add2"){$("hint").innerHTML=`<div>💡 Separa decenas y unidades.</div><div class="hint-count"><span>${tensA*10}</span><span>+</span><span>${onesA}</span><span>y</span><span>${tensB*10}</span><span>+</span><span>${onesB}</span></div>`;return`Pista: separa ${current.a} y ${current.b} en decenas y unidades. Luego suma las partes.`}
- const step=Math.ceil(current.b/10)*10;$("hint").innerHTML=`<div>💡 Busca el salto desde ${current.b} hasta ${current.a}.</div><div class="hint-count"><span>${current.b}</span><span>➜</span><span>${Math.min(step,current.a)}</span><span>➜</span><span>${current.a}</span></div>`;return`Pista: piensa cuánto debes avanzar desde ${current.b} para llegar a ${current.a}.`
-}
-function hintWorld3(){
- clearTimer();
- if(current.type==="spatial"){
-   if(current.mode==="missing"){$("hint").innerHTML=`<div>💡 Mira la constelación por filas y columnas.</div><div class="hint-count"><span>${current.a}</span><span>×</span><span>${current.answer}</span><span>=</span><span>${current.total}</span></div>`;return`Pista espacial: ${current.a} filas por ${current.answer} columnas forman ${current.total} planetas.`}
-   $("hint").innerHTML=`<div>💡 Multiplica filas por columnas.</div><div class="hint-count"><span>${current.a}</span><span>×</span><span>${current.b}</span><span>=</span><span>${current.answer}</span></div>`;return`Pista espacial: ${current.a} filas por ${current.b} columnas forman ${current.answer} planetas.`
- }
- const repeated=Array.from({length:current.b},()=>current.a).join(" + ");
- $("hint").innerHTML=`<div>💡 Puedes transformar la multiplicación en una suma repetida.</div><div class="hint-count"><span>${repeated}</span><span>=</span><span>${current.answer}</span></div>`;
- return`Pista galáctica: suma ${current.a}, ${current.b} veces. El resultado es ${current.answer}.`
-}
-function hint(auto=false){
- if(!current||$("hint").classList.contains("show"))return;
- hints++;const text=player.mundo===3?hintWorld3():player.mundo===2?hintWorld2():hintWorld1();$("hint").classList.add("show");
- let other=options(current.answer).find(v=>v!==current.answer);if(other===undefined)other=Math.max(0,current.answer-1);
- renderAnswers(shuffle([current.answer,other]));speak(`${text} Ahora tienes solo dos opciones.`);
- if(auto)misses=Math.max(misses,2)
-}
-function startGame(){
- clearTimer();round=0;stars=0;hints=0;misses=0;locked=false;speedHits=0;show("game");const w=mundos[player.mundo];speak(`¡Vamos, ${player.nombre}! Comienza tu misión en ${w.name}.`);setTimeout(next,650)
-}
-function finish(){
- clearTimer();const key=`world${player.mundo}`;let p=load(PROGRESS_KEY,{});
- p[key]=p[key]||{missionsCompleted:0,bestStars:0,hintsUsed:0};
- p[key].missionsCompleted++;p[key].bestStars=Math.max(p[key].bestStars||0,stars);p[key].hintsUsed=(p[key].hintsUsed||0)+hints;p[key].lastPlayedAt=new Date().toISOString();
- if(player.mundo===3)p[key].speedHits=(p[key].speedHits||0)+speedHits;
- save(PROGRESS_KEY,p);
- $("correctStat").textContent=stars;$("hintStat").textContent=hints;
- const mascot={1:"🦊🏆",2:"🐒🏆",3:"🚀🏆"}[player.mundo]||"🏆";$("completeMascot").textContent=mascot;
- const place={1:"el Valle de los Números",2:"la Selva Matemática",3:"la Galaxia de las Tablas"}[player.mundo]||"tu mundo";
- const speedText=player.mundo===3&&speedHits?` Activaste ${speedHits} pulso${speedHits===1?"":"s"} de velocidad.`:"";
- $("completeMessage").textContent=`¡${player.nombre}, completaste tu recorrido por ${place}! Cada intento hizo crecer tu poder matemático.${speedText}`;
- show("complete");speak(`¡Misión completada, ${player.nombre}! Lograste ${stars} retos.${speedText} ¡Excelente aventura matemática!`)
-}
-$("playerForm").onsubmit=e=>{e.preventDefault();const nombre=$("nombre").value.trim(),edad=Number($("edad").value);if(!nombre||!edad)return;player={nombre,edad,mundo:mundo(edad),creadoEn:new Date().toISOString()};save(PLAYER_KEY,player);configureWorld();show("world");const w=mundos[player.mundo];speak(`¡Excelente, ${nombre}! Tu aventura comienza en ${w.name}. ${w.desc}`)};
-$("listenWelcome").onclick=welcome;
-$("enterWorld").onclick=()=>{if(player&&player.mundo<=3)startGame()};
-$("changePlayer").onclick=()=>{clearTimer();player=null;try{localStorage.removeItem(PLAYER_KEY)}catch{}$("nombre").value="";$("edad").value="";show("setup");setTimeout(welcome,200)};
-$("home").onclick=()=>{clearTimer();if("speechSynthesis" in window)window.speechSynthesis.cancel();configureWorld();show("world")};
-$("repeat").onclick=()=>speak(current?.speech);
-$("again").onclick=startGame;
-$("backWorld").onclick=()=>{clearTimer();configureWorld();show("world")};
-if(player?.nombre&&player?.edad&&player?.mundo){$("nombre").value=player.nombre;$("edad").value=String(player.edad);configureWorld();show("world")}else show("setup");
+const PK="123iam_player",GK="123iam_progress",$=id=>document.getElementById(id),S=["setup","world","game","complete"];
+const W={1:{name:"🌈 El Valle de los Números",desc:"Contaremos objetos y resolveremos sumas y restas hasta 10.",art:"🦊🔢",bg:"linear-gradient(#8be7ff 58%,#9ee57a 58%)",rounds:8,k:"🌈 El Valle de los Números"},2:{name:"🌴 La Selva Matemática",desc:"Resolveremos sumas, restas y tablas 1, 2, 3 y 5.",art:"🐒🌴",bg:"linear-gradient(#77d6ff 52%,#62c86e 52%)",rounds:10,k:"🌴 La Selva Matemática"},3:{name:"🚀 La Galaxia de las Tablas",desc:"Practicaremos tablas 4, 6, 7 y 8 con velocidad, precisión y lógica espacial.",art:"🚀🪐",bg:"radial-gradient(circle,#6358c7,#211657 70%)",rounds:10,k:"🚀 La Galaxia de las Tablas"},4:{name:"🏙️ La Ciudad de los Maestros",desc:"Dominaremos las tablas 9 y 10, repasaremos del 1 al 10 y resolveremos problemas aplicados.",art:"🏙️🏆",bg:"linear-gradient(#79d7ff 55%,#e7bd76 55%)",rounds:12,k:"🏙️ La Ciudad de los Maestros"}};
+const O=[["🍎","manzanas"],["⭐","estrellas"],["🌼","flores"],["🍓","fresas"],["🥭","mangos"],["🐒","monitos"]],GOOD=["¡Fantástico! 🌟","¡Lo hiciste genial! 🎉","¡Excelente trabajo! ⭐"],GENTLE=["¡Casi! Inténtalo otra vez 💪","¡Buen intento! Vamos una vez más 🌟","¡Vas muy bien! Mira con calma 😊"];
+let p=load(PK,null),c=null,r=0,stars=0,hints=0,miss=0,lock=false,timer=null,left=0,speedHits=0;
+function load(k,f){try{return JSON.parse(localStorage.getItem(k))||f}catch{return f}}function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+function show(x){S.forEach(n=>$(n).classList.toggle("active",n===x));scrollTo(0,0)}function world(age){return age<=5?1:age<=7?2:age===8?3:4}
+function say(t){if(!("speechSynthesis"in window)||!t)return;speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang="es-CO";u.rate=p?.mundo===1?.88:.93;u.pitch=1.1;speechSynthesis.speak(u)}
+function config(){if(!p)return;let w=W[p.mundo];$("worldBadge").textContent=`Mundo ${p.mundo}`;$("worldTitle").textContent=`¡${p.nombre}, tu aventura comienza en ${w.name}!`;$("worldDescription").textContent=w.desc;$("worldArt").textContent=w.art;$("worldArt").style.background=w.bg;$("miniName").textContent=p.nombre;let labels={1:["🌟 ¡Entrar al Valle!","Conteo, suma y resta hasta 10."],2:["🌴 ¡Explorar la Selva!","Suma, resta y tablas 1, 2, 3 y 5."],3:["🚀 ¡Despegar a la Galaxia!","Tablas 4, 6, 7 y 8 con velocidad y lógica."],4:["🏙️ ¡Entrar a la Ciudad!","Maestría: tablas 9 y 10, repaso 1–10 y problemas aplicados."]}[p.mundo];$("enterWorld").textContent=labels[0];$("enterWorld").disabled=false;$("worldNote").textContent=labels[1]}
+const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a,pick=a=>a[ri(0,a.length-1)],shuffle=a=>[...a].sort(()=>Math.random()-.5),objs=(n,e,off=false)=>Array.from({length:n},()=>`<span class="obj${off?" removed":""}">${e}</span>`).join("");
+function q1(){let t=pick(["count","add","sub"]),o=pick(O.slice(0,4));if(t==="count"){let a=ri(1,10);return{w:1,t,a,b:0,ans:a,max:10,o,q:`¿Cuántas ${o[1]} ves?`,s:`¿Cuántas ${o[1]} ves? Cuenta con calma.`}}if(t==="add"){let a=ri(1,6),b=ri(1,10-a);return{w:1,t,a,b,ans:a+b,max:10,o,q:`${a} + ${b} = ¿cuánto?`,s:`Tenemos ${a} ${o[1]} y llegan ${b} más. ¿Cuántas hay?`}}let a=ri(2,10),b=ri(1,a);return{w:1,t,a,b,ans:a-b,max:10,o,q:`${a} − ${b} = ¿cuánto?`,s:`Había ${a} ${o[1]} y se fueron ${b}. ¿Cuántas quedan?`}}
+function q2(){let t=pick(["add2","sub2","mult","mult"]);if(t==="add2"){let a=ri(10,p.edad===6?49:79),b=ri(10,Math.min(49,99-a));return{w:2,t,a,b,ans:a+b,max:99,q:`${a} + ${b} = ¿cuánto?`,s:`¿Cuánto es ${a} más ${b}?`}}if(t==="sub2"){let a=ri(20,p.edad===6?69:99),b=ri(10,a-1);return{w:2,t,a,b,ans:a-b,max:99,q:`${a} − ${b} = ¿cuánto?`,s:`¿Cuánto es ${a} menos ${b}?`}}let a=pick([1,2,3,5]),b=p.edad===6?ri(1,6):ri(2,10),o=pick(O.slice(4));return{w:2,t:"mult",a,b,ans:a*b,max:50,o,q:`${b} grupos de ${a} = ¿cuántos?`,s:`Hay ${b} grupos con ${a} ${o[1]} en cada grupo. ¿Cuántos hay?`}}
+function q3(){let a=pick([4,6,7,8]),b=ri(2,10),t=pick(["speed","precision","spatial"]);if(t==="speed")return{w:3,t,a,b,ans:a*b,max:80,q:`⚡ ${a} × ${b} = ¿cuánto?`,s:`Pulso orbital. ¿Cuánto es ${a} por ${b}?`};if(t==="precision")return{w:3,t,a,b,ans:a*b,max:80,q:`🎯 ${a} × ${b} = ¿cuánto?`,s:`Radar de precisión. Encuentra ${a} por ${b}.`};if(Math.random()<.45)return{w:3,t:"spatial",mode:"missing",a,b,total:a*b,ans:b,max:10,q:`🪐 ${a} filas forman ${a*b} planetas. ¿Cuántas columnas?`,s:`Hay ${a} filas y ${a*b} planetas. ¿Cuántas columnas?`};return{w:3,t:"spatial",a,b,ans:a*b,max:80,q:`🪐 ${a} filas de ${b} planetas. ¿Cuántos hay?`,s:`Observa ${a} filas de ${b}. ¿Cuántos planetas hay?`}}
+function q4(){let t=pick(["master","master","review","missing","problem"]);if(t==="master"){let a=pick([9,10]),b=ri(2,10);return{w:4,t,a,b,ans:a*b,max:100,q:`🏆 ${a} × ${b} = ¿cuánto?`,s:`Desafío de maestro. ¿Cuánto es ${a} por ${b}?`}}if(t==="review"){let a=ri(1,10),b=ri(2,10);return{w:4,t,a,b,ans:a*b,max:100,q:`🧠 Repaso: ${a} × ${b} = ¿cuánto?`,s:`Repaso total. ¿Cuánto es ${a} por ${b}?`}}if(t==="missing"){let a=ri(2,10),b=ri(2,10);return{w:4,t,a,b,total:a*b,ans:b,max:10,q:`🔎 ${a} × ? = ${a*b}. ¿Qué número falta?`,s:`Encuentra el factor perdido. ${a} por qué número es ${a*b}?`}}let x=pick([["🚌","autobuses","niños"],["🏢","edificios","ventanas"],["🌳","parques","árboles"],["🚲","estaciones","bicicletas"]]),a=ri(2,8),b=ri(3,10);return{w:4,t:"problem",a,b,ans:a*b,max:80,x,q:`${x[0]} Hay ${a} ${x[1]} con ${b} ${x[2]} en cada uno. ¿Cuántos ${x[2]} hay?`,s:`Problema de la ciudad. Hay ${a} ${x[1]} con ${b} ${x[2]} en cada uno. ¿Cuántos hay en total?`}}
+function question(){return p.mundo===4?q4():p.mundo===3?q3():p.mundo===2?q2():q1()}
+function visual(){let v=$("visual");v.className="visual"+(c.w===3?" space":c.w===4?" city":"");if(c.w===1){v.innerHTML=c.t==="count"?objs(c.a,c.o[0]):c.t==="add"?`${objs(c.a,c.o[0])}<span class="symbol">+</span>${objs(c.b,c.o[0])}`:`${objs(c.a-c.b,c.o[0])}${objs(c.b,c.o[0],true)}`;return}if(c.w===2){if(c.t==="mult"){v.innerHTML=Array.from({length:c.b},()=>`<span class="group">${objs(c.a,c.o[0])}</span>`).join("");return}v.innerHTML=`<div class="city-row"><div class="building">${c.a}<small>primer número</small></div><span class="symbol">${c.t==="add2"?"+":"−"}</span><div class="building">${c.b}<small>segundo número</small></div></div>`;return}if(c.w===3){if(c.t==="spatial"){let cells=Array.from({length:c.a*c.b},()=>'<span class="planet">•</span>').join("");v.innerHTML=`<div><div class="planet-grid" style="grid-template-columns:repeat(${c.b},30px)">${cells}</div><b>${c.a} filas × ${c.b} columnas</b></div>`}else v.innerHTML=`<div style="font-size:70px">🚀</div><b>${c.a} × ${c.b} = ?</b>`;return}if(c.t==="problem"){v.innerHTML=`<div class="building">${c.x[0]} ${c.a} ${c.x[1]}<small>${c.b} ${c.x[2]} cada uno</small></div>`}else if(c.t==="missing"){v.innerHTML=`<div class="city-row"><div class="building">${c.a}</div><b>×</b><div class="building">?</div><b>=</b><div class="building">${c.total}</div></div>`}else v.innerHTML=`<div class="city-row"><div class="building">${c.a}</div><b>×</b><div class="building">${c.b}</div><b>=</b><div class="building">?</div></div>`}
+function opts(n=3){let max=c.max||100,d=max===10?3:max<=50?8:15,s=new Set([c.ans]);while(s.size<n){let x=Math.max(0,Math.min(max,c.ans+ri(-d,d)));if(x!==c.ans)s.add(x)}return shuffle([...s])}
+function answers(a=opts()){let b=$("answers");b.innerHTML="";b.classList.toggle("two",a.length===2);a.forEach(x=>{let q=document.createElement("button");q.className="answer";q.textContent=x;q.onclick=()=>choose(x,q);b.appendChild(q)})}
+function update(){let n=W[p.mundo].rounds;$("roundText").textContent=`Reto ${Math.min(r+1,n)} de ${n}`;$("bar").style.width=`${r/n*100}%`;$("starCount").textContent=`⭐ ${stars}`}
+function clearTimer(){if(timer)clearInterval(timer);timer=null;$("timer").className="timer";$("timer").textContent=""}
+function startTimer(){left=15;$("timer").className="timer show";$("timer").textContent=`⏱️ ${left}`;timer=setInterval(()=>{left--;$("timer").textContent=`⏱️ ${Math.max(0,left)}`;$("timer").classList.toggle("low",left<=5);if(left<=0){clearTimer();$("feedback").textContent="¡Recarga de energía! Te doy una pista 🚀";say("No pasa nada. Te doy una pista para seguir.");hint(true)}},1000)}
+function next(){if(r>=W[p.mundo].rounds)return finish();clearTimer();lock=false;miss=0;c=question();$("gameKicker").textContent=W[p.mundo].k;$("question").textContent=c.q;$("feedback").textContent="";$("hint").className="hint";$("hint").innerHTML="";visual();answers();update();say(c.s);if(c.w===3&&c.t==="speed")setTimeout(()=>{if(!lock)startTimer()},1600)}
+function choose(x,b){if(lock)return;if(x===c.ans){if(c.w===3&&c.t==="speed"&&timer&&left>0)speedHits++;clearTimer();lock=true;b.classList.add("good");stars++;let m=pick(GOOD);$("feedback").textContent=m;say(`${m} La respuesta es ${c.ans}.`);r++;update();setTimeout(next,900)}else{miss++;let m=pick(GENTLE);$("feedback").textContent=m;say(m);if(miss>=2)hint()}}
+function hint(auto=false){if($("hint").classList.contains("show"))return;clearTimer();hints++;let t="";if(c.w===1)t=c.ans===0?"No queda ninguno. La respuesta es cero.":`Cuenta despacio hasta ${c.ans}.`;else if(c.w===2&&c.t==="mult")t=`Multiplicar es sumar ${c.a}, ${c.b} veces. El resultado es ${c.ans}.`;else if(c.w===2)t=`Separa decenas y unidades. La respuesta es ${c.ans}.`;else if(c.w===3&&c.t==="spatial")t=`Multiplica filas por columnas: ${c.a} por ${c.b}.`;else if(c.w===3)t=`Puedes sumar ${c.a}, ${c.b} veces. Obtienes ${c.ans}.`;else if(c.t==="missing")t=`Divide ${c.total} entre ${c.a}. El factor faltante es ${c.ans}.`;else if(c.t==="problem")t=`Son ${c.a} grupos de ${c.b}. Multiplica para obtener ${c.ans}.`;else if(c.a===9)t=`Truco del 9: 10 por ${c.b} menos ${c.b} es ${c.ans}.`;else if(c.a===10)t=`En la tabla del 10 agrega un cero: ${c.ans}.`;else t=`Forma ${c.b} grupos de ${c.a}. El resultado es ${c.ans}.`;$("hint").innerHTML=`💡 ${t}<div class="hintline">Ahora tienes solo dos opciones.</div>`;$("hint").classList.add("show");let other=opts().find(x=>x!==c.ans);answers(shuffle([c.ans,other]));say(t+" Ahora elige entre dos opciones.");if(auto)miss=2}
+function start(){clearTimer();r=stars=hints=miss=speedHits=0;lock=false;show("game");say(`¡Vamos, ${p.nombre}! Comienza tu misión en ${W[p.mundo].name}.`);setTimeout(next,500)}
+function finish(){clearTimer();let g=load(GK,{}),k=`world${p.mundo}`;g[k]=g[k]||{missionsCompleted:0,bestStars:0,hintsUsed:0};g[k].missionsCompleted++;g[k].bestStars=Math.max(g[k].bestStars,stars);g[k].hintsUsed+=hints;g[k].lastPlayedAt=new Date().toISOString();if(p.mundo===3)g[k].speedHits=(g[k].speedHits||0)+speedHits;if(p.mundo===4&&stars===W[4].rounds)g[k].perfectMissions=(g[k].perfectMissions||0)+1;save(GK,g);$("correctStat").textContent=stars;$("hintStat").textContent=hints;$("completeMascot").textContent={1:"🦊🏆",2:"🐒🏆",3:"🚀🏆",4:"🏙️🏆"}[p.mundo];let medal=p.mundo===4?(stars===12?" ¡Medalla de Maestría Perfecta! 🥇":stars>=9?" ¡Medalla de Maestro Matemático! 🏅":" ¡Tu maestría sigue creciendo! 🌟"):"";$("completeMessage").textContent=`¡${p.nombre}, completaste ${W[p.mundo].name}! Lograste ${stars} de ${W[p.mundo].rounds} retos.${medal}`;show("complete");say($("completeMessage").textContent)}
+$("playerForm").onsubmit=e=>{e.preventDefault();let n=$("nombre").value.trim(),a=+$("edad").value;if(!n||!a)return;p={nombre:n,edad:a,mundo:world(a),creadoEn:new Date().toISOString()};save(PK,p);config();show("world");say(`¡Excelente, ${n}! Tu aventura comienza en ${W[p.mundo].name}.`)};
+$("listenWelcome").onclick=()=>say("¡Hola! Soy IAM. Dime cómo te llamas y cuántos años tienes.");$("enterWorld").onclick=start;$("repeat").onclick=()=>say(c?.s);$("home").onclick=()=>{clearTimer();config();show("world")};$("again").onclick=start;$("backWorld").onclick=()=>{config();show("world")};$("changePlayer").onclick=()=>{clearTimer();p=null;localStorage.removeItem(PK);$("nombre").value="";$("edad").value="";show("setup")};
+if(p?.nombre){$("nombre").value=p.nombre;$("edad").value=p.edad;config();show("world")}
 })();
-</script>
-</body>
-</html>
+</script></body></html>

@@ -1,160 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#6c5ce7" />
-  <title>123IAM - Aventura Matemática</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      min-height: 100vh;
-      min-height: 100dvh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(160deg, #6dd5fa, #8e7dff);
-      padding: 20px;
-    }
-    .game-card {
-      width: min(520px, 100%);
-      background: #fff;
-      border-radius: 32px;
-      padding: 32px;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
-      animation: aparecer 0.6s ease-out;
-    }
-    .mascot { font-size: 88px; animation: flotar 2s ease-in-out infinite; }
-    h1 { font-size: clamp(2rem, 8vw, 3.5rem); color: #5746d9; margin-bottom: 10px; }
-    .intro { color: #485066; font-size: 1.15rem; line-height: 1.5; margin-bottom: 26px; }
-    label { display: block; text-align: left; color: #32384d; font-size: 1.1rem; font-weight: 700; margin: 18px 0 8px; }
-    input, select {
-      width: 100%; min-height: 58px; border: 3px solid #dedcff; border-radius: 18px;
-      padding: 12px 16px; font-size: 1.2rem; outline: none; transition: 0.2s ease; background: #fff;
-    }
-    input:focus, select:focus { border-color: #6c5ce7; transform: scale(1.01); }
-    button {
-      width: 100%; min-height: 64px; border: none; border-radius: 20px; margin-top: 26px;
-      background: linear-gradient(135deg, #ffb703, #ff7b00); color: white; font-size: 1.3rem;
-      font-weight: 800; cursor: pointer; box-shadow: 0 8px 0 #d95f00; transition: transform 0.15s ease;
-    }
-    button:active { transform: translateY(5px); box-shadow: 0 3px 0 #d95f00; }
-    button:disabled { opacity: .65; cursor: default; box-shadow: none; transform: none; }
-    #resultado { display: none; margin-top: 25px; padding: 22px; border-radius: 22px; background: #f1f7ff; }
-    #resultado h2 { color: #5746d9; margin-bottom: 10px; }
-    #resultado p { color: #485066; font-size: 1.05rem; line-height: 1.5; }
-    #entrarMundo { display: none; }
-    .proximamente { margin-top: 12px; font-size: .95rem; color: #667085; }
-    @keyframes aparecer { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6c5ce7">
+<title>123IAM - Aventura Matemática</title>
+<style>
+:root{--p:#6c5ce7;--pd:#4b39bf;--ink:#30354a;--muted:#667085;--yellow:#ffca28;--orange:#ff8a00;--green:#2ecc71}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}html,body{min-height:100%}body{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(160deg,#6dd5fa,#8e7dff);padding:max(14px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));overflow-x:hidden}button,input,select{font:inherit}button{touch-action:manipulation}.app{width:min(780px,100%)}.screen{display:none}.screen.active{display:block;animation:fade .35s ease}.card{background:rgba(255,255,255,.98);border-radius:30px;padding:clamp(20px,5vw,36px);text-align:center;box-shadow:0 20px 60px rgba(48,53,74,.2)}.mascot{font-size:clamp(70px,15vw,96px);line-height:1;animation:float 2s ease-in-out infinite}h1{font-size:clamp(2rem,8vw,3.5rem);color:#5746d9;margin:12px 0}h2{color:#5746d9}.intro{max-width:600px;margin:10px auto 22px;color:#4d5368;font-size:clamp(1rem,3.6vw,1.18rem);line-height:1.55}label{display:block;text-align:left;margin:17px 0 7px;font-size:1.08rem;font-weight:850}input,select{width:100%;min-height:60px;border:3px solid #dedcff;border-radius:18px;padding:12px 16px;font-size:1.15rem;background:#fff;outline:none}input:focus,select:focus{border-color:var(--p);box-shadow:0 0 0 4px rgba(108,92,231,.12)}.primary,.secondary,.icon,.answer{border:0;cursor:pointer}.primary{width:100%;min-height:66px;margin-top:23px;border-radius:20px;background:linear-gradient(135deg,#ffb703,#ff7b00);color:#fff;font-size:1.25rem;font-weight:950;box-shadow:0 8px 0 #d95f00}.primary:active{transform:translateY(5px);box-shadow:0 3px 0 #d95f00}.secondary{min-height:50px;padding:10px 18px;border-radius:16px;background:#eeeaff;color:var(--pd);font-weight:850}.world-badge{display:inline-block;padding:8px 14px;border-radius:999px;background:#eeeaff;color:var(--pd);font-weight:900;margin-bottom:14px}.world-art{min-height:180px;display:grid;place-items:center;margin:18px 0;border-radius:25px;background:linear-gradient(180deg,#8be7ff 0 58%,#9ee57a 58%);font-size:clamp(60px,15vw,90px);overflow:hidden}.topbar{display:grid;grid-template-columns:auto 1fr auto;gap:11px;align-items:center;margin-bottom:18px}.icon{width:50px;height:50px;border-radius:15px;background:#eeeaff;color:var(--pd);font-size:1.3rem;font-weight:900}.progress-wrap{text-align:left;min-width:0}.progress-row{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:.86rem;font-weight:800;margin-bottom:6px}.track{height:14px;background:#eceefa;border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--yellow),var(--orange));border-radius:inherit;transition:width .3s ease}.stars{font-weight:900;color:#8b6700;white-space:nowrap}.challenge{padding:clamp(16px,4vw,28px);border-radius:25px;background:#fbfcff;border:3px solid #eceeff}.kicker{font-weight:900;color:var(--pd);margin-bottom:8px}.question{font-size:clamp(1.5rem,6vw,2.25rem);font-weight:950;min-height:58px;display:grid;place-items:center}.visual{min-height:125px;margin:12px 0 16px;padding:14px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;border-radius:22px;background:#f2fbff;border:3px solid #d8f2ff}.obj{font-size:clamp(35px,8vw,50px);display:inline-block;animation:pop .25s ease both}.obj.removed{opacity:.22;filter:grayscale(1)}.symbol{font-size:2.5rem;font-weight:950;color:var(--pd)}.answers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:17px}.answers.two{grid-template-columns:repeat(2,1fr)}.answer{min-height:78px;border-radius:21px;background:#fff5c8;color:#5b4600;font-size:clamp(1.7rem,7vw,2.4rem);font-weight:950;box-shadow:0 7px 0 #e4b112}.answer:active{transform:translateY(4px);box-shadow:0 3px 0 #e4b112}.answer.good{background:#dcf9e7;color:#176c39;box-shadow:0 7px 0 #7ad69b}.feedback{min-height:48px;margin-top:13px;display:grid;place-items:center;font-size:1.08rem;font-weight:850}.hint{display:none;margin-top:10px;padding:14px;border-radius:17px;background:#fff3c4;color:#6d5200;font-weight:800;line-height:1.4}.hint.show{display:block;animation:pop .25s ease}.hint-count{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-top:10px}.hint-count span{width:37px;height:37px;display:grid;place-items:center;border-radius:50%;background:#fff;color:#5f4800}.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:15px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.stat{padding:18px;border-radius:18px;background:#f5f3ff}.stat strong{display:block;font-size:2rem;color:var(--pd)}.note{font-size:.95rem;color:var(--muted);margin-top:12px}.hidden{display:none!important}@media(max-width:560px){.answers,.answers.two{grid-template-columns:1fr}.world-art{min-height:140px}.visual{min-height:105px}.topbar{grid-template-columns:46px 1fr auto}.icon{width:46px;height:46px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}@keyframes pop{from{opacity:0;transform:scale(.75)}to{opacity:1;transform:scale(1)}}
+</style>
 </head>
 <body>
-  <main class="game-card">
-    <div class="mascot">🦊</div>
-    <h1>¡Hola! Soy IAM</h1>
-    <p class="intro">
-      ¡Bienvenido a <strong>123IAM</strong>! 🌟 Vamos a viajar por mundos increíbles mientras jugamos,
-      contamos y aprendemos matemáticas.
-    </p>
-
-    <form id="playerForm">
-      <label for="nombre">¿Cómo te llamas?</label>
-      <input id="nombre" type="text" maxlength="20" autocomplete="off" placeholder="Escribe tu nombre" required />
-
-      <label for="edad">¿Cuántos años tienes?</label>
-      <select id="edad" required>
-        <option value="">Elige tu edad</option>
-        <option value="4">4 años</option>
-        <option value="5">5 años</option>
-        <option value="6">6 años</option>
-        <option value="7">7 años</option>
-        <option value="8">8 años</option>
-        <option value="9">9 años</option>
-      </select>
-
-      <button type="submit">🚀 ¡Comenzar mi aventura!</button>
-    </form>
-
-    <section id="resultado" aria-live="polite">
-      <h2 id="tituloMundo"></h2>
-      <p id="descripcionMundo"></p>
-      <button id="entrarMundo" type="button">🌈 ¡Entrar al Valle!</button>
-      <p id="proximamente" class="proximamente" hidden>Este mundo se habilitará en una próxima misión.</p>
-    </section>
-  </main>
-
-  <script>
-    const form = document.getElementById("playerForm");
-    const resultado = document.getElementById("resultado");
-    const tituloMundo = document.getElementById("tituloMundo");
-    const descripcionMundo = document.getElementById("descripcionMundo");
-    const entrarMundo = document.getElementById("entrarMundo");
-    const proximamente = document.getElementById("proximamente");
-
-    const mundos = {
-      1: { nombre: "🌈 El Valle de los Números", descripcion: "Aquí conoceremos números, contaremos objetos y resolveremos sumas y restas muy divertidas." },
-      2: { nombre: "🌴 La Selva Matemática", descripcion: "Exploraremos la selva resolviendo sumas, restas y descubriendo las tablas del 1, 2, 3 y 5." },
-      3: { nombre: "🚀 La Galaxia de las Tablas", descripcion: "Viajaremos por planetas matemáticos mientras practicamos las tablas del 4, 6, 7 y 8." },
-      4: { nombre: "🏙️ La Ciudad de los Maestros", descripcion: "Resolveremos grandes desafíos con las tablas del 9 y 10 y repasaremos todas las tablas." }
-    };
-
-    function obtenerMundo(edad) {
-      if (edad <= 5) return 1;
-      if (edad <= 7) return 2;
-      if (edad === 8) return 3;
-      return 4;
-    }
-
-    function hablar(texto) {
-      if (!("speechSynthesis" in window)) return;
-      window.speechSynthesis.cancel();
-      const mensaje = new SpeechSynthesisUtterance(texto);
-      mensaje.lang = "es-CO";
-      mensaje.rate = 0.9;
-      mensaje.pitch = 1.15;
-      mensaje.volume = 1;
-      window.speechSynthesis.speak(mensaje);
-    }
-
-    function bienvenidaInicial() {
-      hablar("¡Hola! Soy IAM. Bienvenido a 123 IAM. Vamos a vivir una increíble aventura matemática. Primero dime cómo te llamas y cuántos años tienes.");
-    }
-
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const nombre = document.getElementById("nombre").value.trim();
-      const edad = Number(document.getElementById("edad").value);
-      if (!nombre || !edad) return;
-
-      const numeroMundo = obtenerMundo(edad);
-      const mundo = mundos[numeroMundo];
-      tituloMundo.textContent = `¡${nombre}, tu aventura comienza en ${mundo.nombre}!`;
-      descripcionMundo.textContent = mundo.descripcion;
-      resultado.style.display = "block";
-
-      const player = { nombre, edad, mundo: numeroMundo, creadoEn: new Date().toISOString() };
-      localStorage.setItem("123iam_player", JSON.stringify(player));
-
-      if (numeroMundo === 1) {
-        entrarMundo.style.display = "block";
-        proximamente.hidden = true;
-      } else {
-        entrarMundo.style.display = "none";
-        proximamente.hidden = false;
-      }
-
-      hablar(`¡Excelente, ${nombre}! Tienes ${edad} años. Tu aventura comienza en ${mundo.nombre}. ${mundo.descripcion} ¡Vamos a jugar!`);
-    });
-
-    entrarMundo.addEventListener("click", () => {
-      hablar("¡Vamos al Valle de los Números!");
-      window.setTimeout(() => { window.location.href = "mundo1.html"; }, 250);
-    });
-
-    window.addEventListener("load", bienvenidaInicial);
-  </script>
+<main class="app">
+<section id="setup" class="screen active"><div class="card"><div class="mascot">🦊</div><h1>¡Hola! Soy IAM</h1><p class="intro">¡Bienvenido a <strong>123IAM</strong>! 🌟 Vamos a viajar por mundos increíbles mientras jugamos, contamos y aprendemos matemáticas.</p><form id="playerForm"><label for="nombre">¿Cómo te llamas?</label><input id="nombre" maxlength="20" autocomplete="off" placeholder="Escribe tu nombre" required><label for="edad">¿Cuántos años tienes?</label><select id="edad" required><option value="">Elige tu edad</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select><button class="primary" type="submit">🚀 ¡Comenzar mi aventura!</button></form><button id="listenWelcome" class="secondary" type="button" style="margin-top:16px">🔊 Escuchar a IAM</button></div></section>
+<section id="world" class="screen"><div class="card"><div id="worldBadge" class="world-badge"></div><h2 id="worldTitle"></h2><p id="worldDescription" class="intro"></p><div id="worldArt" class="world-art"></div><button id="enterWorld" class="primary" type="button"></button><p id="worldNote" class="note"></p><button id="changePlayer" class="secondary" type="button" style="margin-top:15px">👤 Cambiar jugador</button></div></section>
+<section id="game" class="screen"><div class="card"><div class="topbar"><button id="home" class="icon" type="button" aria-label="Volver al mundo">⌂</button><div class="progress-wrap"><div class="progress-row"><span id="roundText">Reto 1 de 8</span><span id="miniName"></span></div><div class="track"><div id="bar" class="bar"></div></div></div><div id="starCount" class="stars">⭐ 0</div></div><div class="challenge"><div class="kicker">🌈 El Valle de los Números</div><div id="question" class="question"></div><div id="visual" class="visual"></div><button id="repeat" class="secondary" type="button">🔊 Escuchar pregunta</button><div id="answers" class="answers"></div><div id="feedback" class="feedback" aria-live="polite"></div><div id="hint" class="hint" aria-live="polite"></div></div></div></section>
+<section id="complete" class="screen"><div class="card"><div class="mascot">🦊🏆</div><h1>¡Misión completada!</h1><p id="completeMessage" class="intro"></p><div class="stats"><div class="stat"><strong id="correctStat">0</strong><span>Retos logrados</span></div><div class="stat"><strong id="hintStat">0</strong><span>Pistas usadas</span></div></div><button id="again" class="primary" type="button">🎮 Jugar otra misión</button><button id="backWorld" class="secondary" type="button" style="margin-top:15px">🗺️ Volver al mundo</button></div></section>
+</main>
+<script>
+(()=>{
+const TOTAL=8,PLAYER_KEY="123iam_player",PROGRESS_KEY="123iam_progress";
+const $=id=>document.getElementById(id),screens={setup:$("setup"),world:$("world"),game:$("game"),complete:$("complete")};
+const mundos={1:{name:"🌈 El Valle de los Números",desc:"Aquí conoceremos números, contaremos objetos y resolveremos sumas y restas muy divertidas.",art:"🦊🔢",bg:"linear-gradient(180deg,#8be7ff 0 58%,#9ee57a 58% 100%)"},2:{name:"🌴 La Selva Matemática",desc:"Exploraremos la selva resolviendo sumas, restas y descubriendo las tablas del 1, 2, 3 y 5.",art:"🐒🌴",bg:"linear-gradient(180deg,#77d6ff 0 52%,#62c86e 52% 100%)"},3:{name:"🚀 La Galaxia de las Tablas",desc:"Viajaremos por planetas matemáticos mientras practicamos las tablas del 4, 6, 7 y 8.",art:"🚀🪐",bg:"linear-gradient(180deg,#2f2670 0 65%,#594ac8 100%)"},4:{name:"🏙️ La Ciudad de los Maestros",desc:"Resolveremos grandes desafíos con las tablas del 9 y 10 y repasaremos todas las tablas.",art:"🏙️🏆",bg:"linear-gradient(180deg,#79d7ff 0 55%,#e7bd76 55% 100%)"}};
+const objects=[{e:"🍎",n:"manzanas"},{e:"⭐",n:"estrellas"},{e:"🐞",n:"mariquitas"},{e:"🌼",n:"flores"},{e:"🦋",n:"mariposas"},{e:"🍓",n:"fresas"}],good=["¡Fantástico! 🌟","¡Lo hiciste genial! 🎉","¡Muy bien, explorador! 🚀","¡Excelente trabajo! ⭐"],gentle=["¡Casi! Inténtalo otra vez 💪","¡Buen intento! Vamos una vez más 🌟","¡Vas muy bien! Mira con calma 😊"];
+let player=load(PLAYER_KEY,null),current=null,round=0,stars=0,hints=0,misses=0,locked=false;
+function load(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch{return f}}function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+function show(name){Object.entries(screens).forEach(([k,v])=>v.classList.toggle("active",k===name));scrollTo({top:0,behavior:"smooth"})}
+function mundo(edad){if(edad<=5)return 1;if(edad<=7)return 2;if(edad===8)return 3;return 4}
+function speak(text){if(!("speechSynthesis" in window)||!text)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="es-CO";u.rate=.88;u.pitch=1.12;u.volume=1;speechSynthesis.speak(u)}
+function welcome(){speak("¡Hola! Soy IAM. Bienvenido a 123 IAM. Primero dime cómo te llamas y cuántos años tienes.")}
+function configureWorld(){if(!player)return;const w=mundos[player.mundo];$("worldBadge").textContent=`Mundo ${player.mundo}`;$("worldTitle").textContent=`¡${player.nombre}, tu aventura comienza en ${w.name}!`;$("worldDescription").textContent=w.desc;$("worldArt").textContent=w.art;$("worldArt").style.background=w.bg;$("miniName").textContent=player.nombre;if(player.mundo===1){$("enterWorld").textContent="🌟 ¡Entrar al Valle!";$("enterWorld").disabled=false;$("worldNote").textContent="Tu primera misión ya está disponible."}else{$("enterWorld").textContent="🔒 Mundo en preparación";$("enterWorld").disabled=true;$("worldNote").textContent="Este mundo ya está asignado a tu perfil y se habilitará en una próxima etapa."}}
+function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}function pick(a){return a[ri(0,a.length-1)]}function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]]}return a}
+function challenge(){const type=pick(["count","add","sub"]),o=pick(objects);if(type==="count"){const a=ri(1,10);return{type,a,b:0,answer:a,o,q:`¿Cuántas ${o.n} ves?`,speech:`¿Cuántas ${o.n} ves? Cuenta con calma y toca el número correcto.`}}if(type==="add"){const a=ri(1,6),b=ri(1,10-a);return{type,a,b,answer:a+b,o,q:`${a} + ${b} = ¿cuánto?`,speech:`Tenemos ${a} ${o.n} y llegan ${b} más. ¿Cuántas hay ahora?`}}const a=ri(2,10),b=ri(1,a);return{type,a,b,answer:a-b,o,q:`${a} − ${b} = ¿cuánto?`,speech:`Había ${a} ${o.n} y se fueron ${b}. ¿Cuántas quedan?`}}
+function obj(n,e,removed=false){return Array.from({length:n},(_,i)=>`<span class="obj${removed?' removed':''}" style="animation-delay:${i*45}ms">${e}</span>`).join("")}
+function renderVisual(c){if(c.type==="count"){$("visual").innerHTML=obj(c.a,c.o.e);return}if(c.type==="add"){$("visual").innerHTML=`<span>${obj(c.a,c.o.e)}</span><span class="symbol">+</span><span>${obj(c.b,c.o.e)}</span>`;return}$("visual").innerHTML=`<span>${obj(c.a-c.b,c.o.e)}${obj(c.b,c.o.e,true)}</span>`}
+function options(ans,n=3){const s=new Set([ans]);let guard=0;while(s.size<n&&guard++<60){const v=Math.max(0,Math.min(10,ans+ri(-3,3)));if(v!==ans)s.add(v)}for(let i=0;s.size<n&&i<=10;i++)s.add(i);return shuffle([...s]).slice(0,n)}
+function renderAnswers(values){const box=$("answers");box.innerHTML="";box.classList.toggle("two",values.length===2);values.forEach(v=>{const b=document.createElement("button");b.type="button";b.className="answer";b.textContent=v;b.setAttribute("aria-label",`Respuesta ${v}`);b.onclick=()=>choose(v,b);box.appendChild(b)})}
+function update(){$("roundText").textContent=`Reto ${Math.min(round+1,TOTAL)} de ${TOTAL}`;$("bar").style.width=`${round/TOTAL*100}%`;$("starCount").textContent=`⭐ ${stars}`}
+function next(){if(round>=TOTAL)return finish();locked=false;misses=0;current=challenge();$("question").textContent=current.q;$("feedback").textContent="";$("hint").classList.remove("show");$("hint").innerHTML="";renderVisual(current);renderAnswers(options(current.answer));update();speak(current.speech)}
+function choose(v,button){if(locked||!current)return;if(v===current.answer){locked=true;button.classList.add("good");stars++;const m=pick(good);$("feedback").textContent=m;$("starCount").textContent=`⭐ ${stars}`;speak(`${m} La respuesta es ${current.answer}.`);round++;$("bar").style.width=`${round/TOTAL*100}%`;setTimeout(next,1050);return}misses++;const m=pick(gentle);$("feedback").textContent=m;speak(m);button.animate([{transform:"translateX(0)"},{transform:"translateX(-7px)"},{transform:"translateX(7px)"},{transform:"translateX(0)"}],{duration:280});if(misses>=2)hint()}
+function hint(){if(!current||$("hint").classList.contains("show"))return;hints++;const a=current.answer,nums=Array.from({length:a},(_,i)=>`<span>${i+1}</span>`).join("");$("hint").innerHTML=`<div>💡 ${a===0?"No queda ningún objeto. Cuando no queda ninguno usamos el número cero.":"Vamos a contar juntos, despacito."}</div>${a>0?`<div class="hint-count">${nums}</div>`:""}`;$("hint").classList.add("show");let other=options(a).find(v=>v!==a);if(other===undefined)other=a===10?9:a+1;renderAnswers(shuffle([a,other]));speak(a>0?`Aquí tienes una pista. Contemos: ${Array.from({length:a},(_,i)=>i+1).join(", ")}. Ahora elige entre dos opciones.`:"Aquí tienes una pista. No queda ninguno. La respuesta puede ser cero.")}
+function startGame(){round=0;stars=0;hints=0;misses=0;locked=false;show("game");speak(`¡Vamos, ${player.nombre}! Comienza tu misión en el Valle de los Números.`);setTimeout(next,650)}
+function finish(){let p=load(PROGRESS_KEY,{world1:{missionsCompleted:0,bestStars:0,hintsUsed:0}});p.world1=p.world1||{missionsCompleted:0,bestStars:0,hintsUsed:0};p.world1.missionsCompleted++;p.world1.bestStars=Math.max(p.world1.bestStars||0,stars);p.world1.hintsUsed=(p.world1.hintsUsed||0)+hints;p.world1.lastPlayedAt=new Date().toISOString();save(PROGRESS_KEY,p);$("correctStat").textContent=stars;$("hintStat").textContent=hints;$("completeMessage").textContent=`¡${player.nombre}, completaste tu recorrido por el Valle de los Números! Cada intento hizo crecer tu poder matemático.`;show("complete");speak(`¡Misión completada, ${player.nombre}! Lograste ${stars} retos. ¡Excelente aventura matemática!`)}
+$("playerForm").onsubmit=e=>{e.preventDefault();const nombre=$("nombre").value.trim(),edad=Number($("edad").value);if(!nombre||!edad)return;player={nombre,edad,mundo:mundo(edad),creadoEn:new Date().toISOString()};save(PLAYER_KEY,player);configureWorld();show("world");const w=mundos[player.mundo];speak(`¡Excelente, ${nombre}! Tu aventura comienza en ${w.name}. ${w.desc}`)};
+$("listenWelcome").onclick=welcome;$("enterWorld").onclick=()=>{if(player?.mundo===1)startGame()};$("changePlayer").onclick=()=>{player=null;try{localStorage.removeItem(PLAYER_KEY)}catch{}$("nombre").value="";$("edad").value="";show("setup");setTimeout(welcome,200)};$("home").onclick=()=>{speechSynthesis?.cancel();configureWorld();show("world")};$("repeat").onclick=()=>speak(current?.speech);$("again").onclick=startGame;$("backWorld").onclick=()=>{configureWorld();show("world")};
+if(player?.nombre&&player?.edad&&player?.mundo){$("nombre").value=player.nombre;$("edad").value=String(player.edad);configureWorld();show("world")}else show("setup");
+})();
+</script>
 </body>
 </html>

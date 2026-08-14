@@ -9,9 +9,82 @@ function configuredVoiceEndpoint(){
   return ""
 }
 
+function normalizeForSpeech(text){
+  return String(text||"")
+    .replace(/\b123\s*IAM\b/gi,"uno dos tres Íam")
+    .replace(/\bIAM\b/gi,"Íam")
+    .replace(/×/g," por ")
+    .replace(/\+/g," más ")
+    .replace(/[−–]/g," menos ")
+    .replace(/÷/g," dividido entre ")
+    .replace(/=/g," es igual a ")
+    .replace(/\s+/g," ")
+    .trim()
+}
+
+function inferVoiceContext(text){
+  const value=String(text||"").toLowerCase();
+  if(/misión completada|medalla|excelente aventura/.test(value))return"celebration";
+  if(/fantástico|lo hiciste genial|muy bien|excelente trabajo|respuesta es/.test(value))return"success";
+  if(/casi|buen intento|otra vez|mira con calma|no pasa nada/.test(value))return"retry";
+  if(/pista|contemos|dos opciones|recarga de energía/.test(value))return"hint";
+  if(/hola|bienvenido|aventura comienza|comienza tu misión/.test(value))return"welcome";
+  if(value.includes("?"))return"question";
+  return"default"
+}
+
+const LATAM_SPANISH_REGIONS=new Set(["es-419","es-mx","es-us","es-ar","es-cl","es-pe","es-ve","es-ec","es-uy","es-bo","es-cr","es-pa","es-do","es-gt","es-hn","es-ni","es-sv","es-pr"]);
+
 class NativeSpeechAdapter{
+  constructor(){
+    this.voices=[];
+    this.selectedVoice=null;
+    this.refreshVoices();
+    if(this.isAvailable()&&typeof window.speechSynthesis.addEventListener==="function"){
+      window.speechSynthesis.addEventListener("voiceschanged",()=>this.refreshVoices())
+    }
+  }
+
   isAvailable(){
     return "speechSynthesis" in window&&"SpeechSynthesisUtterance" in window
+  }
+
+  refreshVoices(){
+    if(!this.isAvailable())return;
+    this.voices=window.speechSynthesis.getVoices()||[];
+    this.selectedVoice=null
+  }
+
+  scoreVoice(voice,preferredLang="es-CO"){
+    const lang=(voice?.lang||"").toLowerCase();
+    const preferred=String(preferredLang||"es-CO").toLowerCase();
+    let score=0;
+
+    if(lang===preferred)score+=140;
+    else if(lang==="es-419")score+=130;
+    else if(LATAM_SPANISH_REGIONS.has(lang))score+=120;
+    else if(lang.startsWith("es-"))score+=85;
+    else if(lang==="es")score+=75;
+    else return-1;
+
+    if(voice.localService)score+=8;
+    if(voice.default)score+=4;
+    return score
+  }
+
+  selectVoice(preferredLang="es-CO"){
+    if(!this.isAvailable())return null;
+    const available=window.speechSynthesis.getVoices()||[];
+    if(available.length!==this.voices.length)this.refreshVoices();
+    if(this.selectedVoice)return this.selectedVoice;
+
+    const ranked=this.voices
+      .map(voice=>({voice,score:this.scoreVoice(voice,preferredLang)}))
+      .filter(item=>item.score>=0)
+      .sort((a,b)=>b.score-a.score);
+
+    this.selectedVoice=ranked[0]?.voice||null;
+    return this.selectedVoice
   }
 
   speak(text,options={}){
@@ -20,9 +93,11 @@ class NativeSpeechAdapter{
     this.stop();
 
     const utterance=new SpeechSynthesisUtterance(text);
-    utterance.lang=options.lang||"es-CO";
+    const voice=this.selectVoice(options.lang||"es-CO");
+    if(voice)utterance.voice=voice;
+    utterance.lang=voice?.lang||options.lang||"es-CO";
     utterance.rate=Number.isFinite(options.rate)?options.rate:.92;
-    utterance.pitch=Number.isFinite(options.pitch)?options.pitch:1.1;
+    utterance.pitch=Number.isFinite(options.pitch)?options.pitch:1.02;
     utterance.volume=Number.isFinite(options.volume)?options.volume:1;
 
     return new Promise(resolve=>{
@@ -111,14 +186,27 @@ class IAMVoiceService{
     this.sequence=0
   }
 
-  voiceOptions(options={}){
+  voiceOptions(text,options={}){
     const world=this.getWorld();
+    const context=options.context||inferVoiceContext(text);
+    const profile={
+      default:{rate:1,pitch:1.02},
+      welcome:{rate:.96,pitch:1.04},
+      question:{rate:.94,pitch:1},
+      success:{rate:1.02,pitch:1.06},
+      retry:{rate:.94,pitch:1},
+      hint:{rate:.9,pitch:.98},
+      celebration:{rate:1.02,pitch:1.07}
+    }[context]||{rate:1,pitch:1.02};
+    const baseRate=world===1?.88:.92;
+
     return{
       lang:"es-CO",
-      rate:world===1?.88:.92,
-      pitch:1.1,
+      rate:baseRate*profile.rate,
+      pitch:profile.pitch,
       volume:1,
-      ...options
+      ...options,
+      context
     }
   }
 
@@ -127,11 +215,12 @@ class IAMVoiceService{
 
     const sequence=++this.sequence;
     this.cancelAdapters();
-    const voiceOptions=this.voiceOptions(options);
+    const preparedText=normalizeForSpeech(text);
+    const voiceOptions=this.voiceOptions(preparedText,options);
 
     if(this.provider&&typeof this.provider.speak==="function"){
       try{
-        const result=await this.provider.speak(text,voiceOptions);
+        const result=await this.provider.speak(preparedText,voiceOptions);
         if(sequence!==this.sequence)return false;
         if(result!==false)return true
       }catch{}
@@ -140,7 +229,7 @@ class IAMVoiceService{
     if(sequence!==this.sequence)return false;
 
     if(this.fallback&&typeof this.fallback.speak==="function"){
-      return this.fallback.speak(text,voiceOptions)
+      return this.fallback.speak(preparedText,voiceOptions)
     }
 
     return false
@@ -157,6 +246,7 @@ class IAMVoiceService{
   }
 }
 
+window.IAMNormalizeForSpeech=normalizeForSpeech;
 window.IAMVoiceService=IAMVoiceService;
 window.IAMRemoteTTSProvider=RemoteTTSProvider;
 window.IAMNativeSpeechAdapter=NativeSpeechAdapter;

@@ -14,6 +14,7 @@ const gentle=["¡Casi! Inténtalo otra vez 💪","¡Buen intento! Vamos una vez 
 let player=load(PLAYER_KEY,null),current=null,round=0,stars=0,hints=0,misses=0,locked=false;
 let timerId=null,timerStartId=null,timeLeft=0,speedHits=0;
 let challengeStartedAt=0,attemptsThisChallenge=0,hintUsedThisChallenge=false,missionFirstTry=0;
+const iamVoice=new window.IAMVoiceService({getWorld:()=>player?.mundo});
 function load(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch{return f}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
 function playerProgressKey(){
@@ -30,7 +31,7 @@ function saveProgress(v){save(playerProgressKey(),v)}
 function show(name){Object.entries(screens).forEach(([k,v])=>v.classList.toggle("active",k===name));window.scrollTo({top:0,behavior:"smooth"})}
 function mundo(edad){if(edad<=5)return 1;if(edad<=7)return 2;if(edad===8)return 3;return 4}
 function totalRounds(){return mundos[player?.mundo]?.rounds||8}
-function speak(text){if(!("speechSynthesis" in window)||!text)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="es-CO";u.rate=player?.mundo===1?.88:.92;u.pitch=1.1;u.volume=1;window.speechSynthesis.speak(u)}
+function speak(text){if(!text)return;void iamVoice.speak(text)}
 function welcome(){speak("¡Hola! Soy IAM. Bienvenido a 123 IAM. Primero dime cómo te llamas y cuántos años tienes.")}
 function configureWorld(){
  if(!player)return;
@@ -276,7 +277,7 @@ $("playerForm").onsubmit=e=>{e.preventDefault();const nombre=$("nombre").value.t
 $("listenWelcome").onclick=welcome;
 $("enterWorld").onclick=()=>{if(player&&player.mundo<=4)startGame()};
 $("changePlayer").onclick=()=>{clearTimer();player=null;try{localStorage.removeItem(PLAYER_KEY)}catch{}$("nombre").value="";$("edad").value="";show("setup");setTimeout(welcome,200)};
-$("home").onclick=()=>{clearTimer();if("speechSynthesis" in window)window.speechSynthesis.cancel();configureWorld();show("world")};
+$("home").onclick=()=>{clearTimer();iamVoice.stop();configureWorld();show("world")};
 $("repeat").onclick=()=>speak(current?.speech);
 $("again").onclick=startGame;
 $("backWorld").onclick=()=>{clearTimer();configureWorld();show("world")};
